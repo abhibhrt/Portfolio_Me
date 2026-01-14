@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 
-import Progress from './sections/appointments'; // Renamed import internally for logic
+import Progress from './sections/appointments';
 import ProjectManager from './sections/projects';
 import Story from './sections/stories';
 
@@ -68,7 +68,7 @@ const AdminDashboard: React.FC = () => {
     router.push('/admin');
   };
 
-  const renderContent = (): JSX.Element | null => {
+  const renderContent = (): React.ReactNode => {
     switch (activeSection) {
       case 'progress':
         return <Progress />;
@@ -118,11 +118,10 @@ const AdminDashboard: React.FC = () => {
               <button
                 key={key}
                 onClick={() => setActiveSection(key)}
-                className={`w-full flex items-center h-12 transition-all duration-300 relative group overflow-hidden cursor-pointer rounded-sm ${
-                  activeSection === key
+                className={`w-full flex items-center h-12 transition-all duration-300 relative group overflow-hidden cursor-pointer rounded-sm ${activeSection === key
                     ? 'text-white bg-blue-600/10'
                     : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
-                }`}
+                  }`}
               >
                 {activeSection === key && (
                   <motion.div
@@ -133,9 +132,8 @@ const AdminDashboard: React.FC = () => {
 
                 <div className="flex items-center px-4 z-10">
                   <Icon
-                    className={`text-lg flex-shrink-0 ${
-                      activeSection === key ? 'text-blue-500' : ''
-                    }`}
+                    className={`text-lg flex-shrink-0 ${activeSection === key ? 'text-blue-500' : ''
+                      }`}
                   />
 
                   <AnimatePresence>
@@ -228,7 +226,7 @@ const AdminDashboard: React.FC = () => {
         <main className="flex-1 overflow-auto relative bg-slate-950">
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none opacity-50" />
-          
+
           <div className="relative z-10 max-w-7xl mx-auto p-6">
             <AnimatePresence mode="wait">
               <motion.div
