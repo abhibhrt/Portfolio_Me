@@ -1,0 +1,62 @@
+[
+    {
+        "id":1,
+        "category": "Languages",
+        "skills": [
+            "C",
+            "C++",
+            "JavaScript",
+            "Python",
+            "MATLAB"
+        ]
+    },
+    {
+        "id":2,
+        "category": "Fundamentals",
+        "skills": [
+            "DSA",
+            "DBMS",
+            "OS"
+        ]
+    },
+    {
+        "id":3,
+        "category": "Front-End",
+        "skills": [
+            "HTML",
+            "CSS",
+            "BootStrap",
+            "React JS"
+        ]
+    },
+    {
+        "id":4,
+        "category": "Back-End",
+        "skills": [
+            "Node.Js",
+            "Express",
+            "MongoDB",
+            "MySQL",
+            "REST API"
+        ]
+    },
+    {
+        "id":5,
+        "category": "Tools",
+        "skills": [
+            "VS Code",
+            "GitHub",
+            "Git",
+            "MS Office"
+        ]
+    },
+    {
+        "id":6,
+        "category": "Soft Skills",
+        "skills": [
+            "Communication",
+            "Team Work",
+            "Leadership"
+        ]
+    }
+]

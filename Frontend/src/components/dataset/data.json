@@ -1,0 +1,114 @@
+{
+  "Projects": [
+    {
+      "github": "https://github.com/abhishekbharti2/VerseEx",
+      "date": "Nov 2024",
+      "title": "Verse Ex",
+      "description": "Personal Project, It is a Space Exploration Web Application, useful for cosmology learners.",
+      "tags": [
+        "MERN Application",
+        "Fully Resposive",
+        "API Integration",
+        "Search Facility",
+        "Filteration"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/project-1.webp",
+      "visit": "https://verseex.netlify.app"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/Ejoyr",
+      "date": "July 2024",
+      "title": "Ejoyr",
+      "description": "Personal Project,It is an E-Commerce website for selling and listing products online.",
+      "tags": [
+        "Fully Resposive",
+        "Static Website",
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/project-2.webp",
+      "visit": "https://ejoyr.netlify.app"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/Server-VerseEX",
+      "date": "March 2025",
+      "title": "API Server VerseEx",
+      "description": "Personal Project, It is an API server for VerseEx, to provide Information.",
+      "tags": [
+        "Node Js",
+        "Express",
+        "Cors",
+        "MongoDB"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/Project-3.webp",
+      "visit": "https://server-verseex.onrender.com/api"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/Bill-Management",
+      "date": "Jan 2025",
+      "title": "Bill Management",
+      "description": "A task from '@BrightMoney' to make a Bill Management web app to managing monthly spends of user.",
+      "tags": [
+        "React Application",
+        "Fully Resposive",
+        "Data Filtering",
+        "Bill Customization"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/Project-4.jpg",
+      "visit": "https://bill-management-chi.vercel.app/"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/RegisterKaro-Clone",
+      "date": "Feb 2025",
+      "title": "RegisterKaro Clone",
+      "description": "A task from '@RegisterKaro' to make their companies web app clone.",
+      "tags": [
+        "React Application",
+        "Fully Resposive"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/project-5.webp",
+      "visit": "https://register-karo-clone-seven.vercel.app/"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/X-Formatter",
+      "date": "Feb 2025",
+      "title": "Excel Formatter",
+      "description": "A simple tool to upload and process Excel files efficiently, Using for Digital Marketing.",
+      "tags": [
+        "React Application",
+        "Excel Data Processing",
+        "Private Repositery"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/Project-6.webp",
+      "visit": "https://excelformatter.netlify.app"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/Attendance-System",
+      "date": "May 2025",
+      "title": "Attendance System",
+      "description": "A task from '@Tryidol Technologies' to make an Attendance System web app to managing monthly spends of user.",
+      "tags": [
+        "MERN Application",
+        "Fully Resposive",
+        "Private Repositery"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/project-7.png",
+      "visit": "https://attendance-system-five-plum.vercel.app"
+    },
+    {
+      "github": "https://github.com/abhishekbharti2/Hotel-Booking",
+      "date": "April 2025",
+      "title": "Hotel Booking",
+      "description": "A task from a client to make a Hotel Booking web app to manage their hotel bookings.",
+      "tags": [
+        "MERN Application",
+        "Fully Resposive",
+        "Filters",
+        "Private Repositery"
+      ],
+      "images": "https://raw.githubusercontent.com/abhishekbharti2/Assets/refs/heads/main/Portfolio/Projects/Project-8.png",
+      "visit": "https://hotel-management-ten-tan.vercel.app"
+    }
+  ]
+}
