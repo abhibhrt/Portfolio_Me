@@ -63,7 +63,7 @@ export default function Footer() {
                         <div>
                             <h4 className="text-xs font-mono text-white mb-6 uppercase tracking-widest border-l-2 border-blue-600 pl-3">Index</h4>
                             <ul className="space-y-3 text-sm text-slate-400">
-                                {['Projects', 'About', 'Skills', 'Admin'].map((item) => (
+                                {['Projects', 'Contacts', 'Progress', 'Admin'].map((item) => (
                                     <li key={item}>
                                         <Link href={`/${item.toLowerCase()}`} className="hover:text-blue-400 transition-colors flex items-center gap-2 group">
                                             <span className="h-[1px] w-0 bg-blue-500 group-hover:w-3 transition-all" />
