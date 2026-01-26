@@ -84,7 +84,7 @@ export default function Navbar() {
                             })}
                             
                             {/* CTA BUTTON */}
-                            <Link href="https://youtube.com/@loopsafar">
+                            <Link href="https://linkedin.com/in/abhibhrt" target="_blank" rel="noopener noreferrer">
                                 <button className="cursor-pointer ml-4 px-5 py-2 border border-blue-600/50 text-blue-400 text-[10px] font-mono tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300 rounded-sm">
                                     CONNECT <FiLink className="inline-block mb-0.5" />
                                 </button>

@@ -119,7 +119,7 @@ export default function HomePage() {
                                             >
                                                 <div className="w-full h-full bg-slate-950 rounded-sm relative overflow-hidden group">
                                                     <Image
-                                                        src="/dp.jpeg"
+                                                        src="/dp.png"
                                                         alt="Abhishek Bharti"
                                                         fill
                                                         className="object-cover transition-all duration-700"
