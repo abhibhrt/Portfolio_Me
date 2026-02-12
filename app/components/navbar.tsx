@@ -31,25 +31,21 @@ export default function Navbar() {
             <motion.nav
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                    scrolled ? 'py-3' : 'py-6'
-                }`}
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3' : 'py-6'
+                    }`}
             >
                 {/* HUD Background Layer */}
-                <div className={`absolute inset-0 transition-all duration-300 ${
-                    scrolled 
-                        ? 'bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 shadow-2xl' 
+                <div className={`absolute inset-0 transition-all duration-300 ${scrolled
+                        ? 'bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 shadow-2xl'
                         : 'bg-transparent'
-                }`} />
+                    }`} />
 
                 <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
                     <div className="flex items-center justify-between h-12">
 
                         {/* ELITE LOGO */}
                         <Link href="/" className="flex items-center gap-3 group">
-                            <div className="bg-blue-600 p-1.5 rounded-sm group-hover:rotate-90 transition-transform duration-500">
-                                <FiCommand className="text-white text-lg" />
-                            </div>
+                            <img src="/icon.png" alt="Elite Logo" className="w-9 h-9 mt-2" />
                             <div className="flex flex-col">
                                 <span className="text-xl font-bold tracking-[0.2em] text-white font-mono">
                                     LOOPSAFAR
@@ -68,21 +64,20 @@ export default function Navbar() {
                                     <Link key={item.path} href={item.path}>
                                         <div className="relative group flex items-center gap-2">
                                             {isActive && (
-                                                <motion.span 
+                                                <motion.span
                                                     layoutId="activeTab"
-                                                    className="w-1.5 h-1.5 bg-blue-500 rounded-full" 
+                                                    className="w-1.5 h-1.5 bg-blue-500 rounded-full"
                                                 />
                                             )}
-                                            <span className={`text-[11px] font-mono tracking-[0.2em] transition-all duration-300 ${
-                                                isActive ? 'text-white' : 'text-slate-500 group-hover:text-blue-400'
-                                            }`}>
+                                            <span className={`text-[11px] font-mono tracking-[0.2em] transition-all duration-300 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-blue-400'
+                                                }`}>
                                                 {item.name}
                                             </span>
                                         </div>
                                     </Link>
                                 )
                             })}
-                            
+
                             {/* CTA BUTTON */}
                             <Link href="https://linkedin.com/in/abhibhrt" target="_blank" rel="noopener noreferrer">
                                 <button className="cursor-pointer ml-4 px-5 py-2 border border-blue-600/50 text-blue-400 text-[10px] font-mono tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300 rounded-sm">
@@ -134,13 +129,12 @@ export default function Navbar() {
                                                 initial={{ opacity: 0, x: 20 }}
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: idx * 0.1 }}
-                                                className={`text-2xl my-6 font-bold tracking-tighter ${
-                                                    pathname === item.path ? 'text-blue-500' : 'text-slate-500'
-                                                }`}
+                                                className={`text-2xl my-6 font-bold tracking-tighter ${pathname === item.path ? 'text-blue-500' : 'text-slate-500'
+                                                    }`}
                                             >
                                                 <span className="text-s font-mono mr-4 opacity-30">0{idx + 1}</span>
                                                 <span className="text-s font-mono mr-4">{item.name}</span>
-    
+
                                             </motion.div>
                                         </Link>
                                     ))}
