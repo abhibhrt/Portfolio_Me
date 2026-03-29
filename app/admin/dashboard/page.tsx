@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 
-import Progress from './sections/appointments';
+import Progress from './sections/problem';
 import ProjectManager from './sections/projects';
 import Story from './sections/stories';
 
@@ -214,7 +214,7 @@ const AdminDashboard: React.FC = () => {
 
             <div className="w-10 h-10 border border-slate-700 p-0.5 rounded-sm bg-slate-800 shadow-xl">
               <img
-                src="/dp.jpeg"
+                src="/dp.png"
                 alt="admin-avatar"
                 className="w-full h-full object-cover rounded-[1px] grayscale hover:grayscale-0 transition-all duration-500"
               />

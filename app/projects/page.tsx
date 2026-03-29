@@ -43,9 +43,9 @@ export default function Projects() {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-16 space-y-2">
-          <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em] uppercase">
+          <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em]">
             <span className="h-[1px] w-8 bg-blue-500" />
-            Deployment_Log
+            abhibhrt/projects
           </div>
           <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
             Featured <span className="text-slate-500">Modules</span>

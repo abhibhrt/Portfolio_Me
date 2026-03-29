@@ -51,9 +51,9 @@ export default function Contact() {
             <div className="relative z-10 max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-16">
-                    <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em] uppercase mb-2">
+                    <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em] mb-2">
                         <span className="h-[1px] w-8 bg-blue-500" />
-                        Comm_Protocol_Active
+                        abhibhrt/contacts
                     </div>
                     <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
                         Get In <span className="text-slate-500">Touch</span>
