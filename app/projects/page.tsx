@@ -48,7 +48,7 @@ export default function Projects() {
             abhibhrt/projects
           </div>
           <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
-            Featured <span className="text-slate-500">Modules</span>
+            Projects <span className="text-slate-500">Modules</span>
           </h2>
         </div>
 

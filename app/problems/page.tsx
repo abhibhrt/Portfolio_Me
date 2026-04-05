@@ -5,11 +5,9 @@ import axios from 'axios';
 import classNames from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FiChevronLeft, FiChevronRight, FiStar, FiLoader, FiCode, FiCheckCircle, FiFileText
+  FiChevronLeft, FiChevronRight, FiStar, FiLoader, FiCode, FiCheckCircle, FiFileText, FiX
 } from 'react-icons/fi';
 import { SiLeetcode, SiGeeksforgeeks } from 'react-icons/si';
-
-// External Component Import
 import { CodeModal } from './CodeBlock';
 
 interface ProblemItem {
@@ -29,6 +27,7 @@ export default function PublicProblemsPage() {
   const [loading, setLoading] = useState(true);
   const [monthOffset, setMonthOffset] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [viewCode, setViewCode] = useState<ProblemItem | null>(null);
 
   useEffect(() => {
@@ -36,8 +35,11 @@ export default function PublicProblemsPage() {
       try {
         const res = await axios.get('/api/problem');
         setProblems(res.data || []);
-      } catch (error) { console.error("Sync Error:", error); }
-      finally { setLoading(false); }
+      } catch (error) {
+        console.error("Sync Error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProblems();
   }, []);
@@ -65,7 +67,17 @@ export default function PublicProblemsPage() {
 
   const { dates, monthName, year, isCurrentMonth } = getMonthInfo(monthOffset);
   const categories = ['All', ...new Set(problems.map(p => p.category))];
-  const filteredProblems = selectedCategory === 'All' ? problems : problems.filter(p => p.category === selectedCategory);
+  
+  const filteredProblems = useMemo(() => {
+    let filtered = problems;
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+    if (selectedDate) {
+      filtered = filtered.filter(p => p.date.split('T')[0] === selectedDate);
+    }
+    return filtered;
+  }, [problems, selectedCategory, selectedDate]);
 
   const getPlatformIcon = (url: string) => {
     if (url.includes('leetcode.com')) return <SiLeetcode className="text-[#FFA116]" size={18} />;
@@ -74,14 +86,17 @@ export default function PublicProblemsPage() {
   };
 
   return (
-    <section className="min-h-screen bg-slate-950 pt-20 pb-20 px-6 text-slate-300">
+    <section className="relative bg-slate-950 py-24 pt-30 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        
-        {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
-          <div>
-            <h2 className="text-4xl font-bold text-white tracking-tight italic uppercase">Problem <span className="text-slate-600 font-normal">Vault</span></h2>
-            <p className="text-xs text-slate-500 mt-2 font-mono uppercase tracking-[0.2em]">Solution Inventory v2.1</p>
+          <div className="mb-16 space-y-2">
+            <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em]">
+              <span className="h-[1px] w-8 bg-blue-500" />
+              abhibhrt/problems
+            </div>
+            <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
+              DSA <span className="text-slate-500">Problems</span>
+            </h2>
           </div>
           <div className="flex flex-wrap gap-2">
             {categories.map(cat => (
@@ -97,9 +112,21 @@ export default function PublicProblemsPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-9 bg-slate-900/20 border border-slate-900 rounded-sm overflow-hidden shadow-2xl">
-              <div className="bg-slate-900/50 px-6 py-4 border-b border-slate-800 flex items-center gap-2">
-                 <FiCheckCircle className="text-emerald-500" size={14}/>
-                 <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-100">Solved Entries</h3>
+              <div className="bg-slate-900/50 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <FiCheckCircle className="text-emerald-500" size={14} />
+                  <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-100">
+                    {selectedDate ? `Solved on ${selectedDate}` : 'Solved Entries'}
+                  </h3>
+                </div>
+                {selectedDate && (
+                  <button 
+                    onClick={() => setSelectedDate(null)}
+                    className="flex items-center gap-1 text-[9px] text-blue-400 hover:text-blue-300 transition-colors uppercase font-bold"
+                  >
+                    <FiX size={12}/> Clear Date Filter
+                  </button>
+                )}
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -114,11 +141,13 @@ export default function PublicProblemsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/40">
-                    {filteredProblems.map((item) => (
+                    {filteredProblems.length > 0 ? filteredProblems.map((item) => (
                       <tr key={item._id} className="hover:bg-blue-600/5 transition-colors group">
                         <td className="px-6 py-5">
                           <div className="text-sm text-white font-bold">{item.problemName}</div>
-                          <div className="text-[10px] text-slate-500 uppercase mt-1 font-medium tracking-tight">{item.category} • {item.date}</div>
+                          <div className="text-[10px] text-slate-500 uppercase mt-1 font-medium tracking-tight">
+                            {item.category} • {item.date.split('T')[0]} • {item.code.language}
+                          </div>
                         </td>
                         <td className="px-4 py-4 text-center">
                           <span className={classNames('text-[9px] font-bold px-2 py-0.5 rounded-sm border', item.difficulty === 'Easy' ? 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5' : item.difficulty === 'Medium' ? 'text-orange-500 border-orange-500/20 bg-orange-500/5' : 'text-red-500 border-red-500/20 bg-red-500/5')}>
@@ -138,7 +167,7 @@ export default function PublicProblemsPage() {
                         <td className="px-4 py-4 text-center">
                           {item.note ? (
                             <button onClick={() => setViewCode(item)} className="text-slate-500 hover:text-blue-400 transition-colors cursor-pointer">
-                                <FiFileText size={16} />
+                              <FiFileText size={16} />
                             </button>
                           ) : (
                             <span className="text-slate-800 text-[9px]">--</span>
@@ -150,40 +179,56 @@ export default function PublicProblemsPage() {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    )) : (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-10 text-center text-slate-600 text-xs font-medium uppercase tracking-widest">
+                          No entries found for this selection
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            {/* Calendar Side */}
             <div className="lg:col-span-3 space-y-6">
-                <div className="bg-slate-900/20 border border-slate-900 p-5 rounded-sm h-fit shadow-xl">
-                    <div className="flex justify-between items-center mb-6 border-b border-slate-800 pb-2">
-                        <h3 className="text-[10px] font-bold text-white uppercase tracking-wider">{monthName} {year}</h3>
-                        <div className="flex gap-1">
-                            <button onClick={() => setMonthOffset(p => p - 1)} className="p-1 border border-slate-800 hover:bg-slate-800 cursor-pointer transition-all"><FiChevronLeft size={14} /></button>
-                            <button disabled={isCurrentMonth} onClick={() => setMonthOffset(p => p + 1)} className="p-1 border border-slate-800 hover:bg-slate-800 disabled:opacity-20 cursor-pointer transition-all"><FiChevronRight size={14} /></button>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-7 gap-1.5">
-                        {['S','M','T','W','T','F','S'].map(d => <div key={d} className="text-[8px] font-bold text-slate-700 text-center">{d}</div>)}
-                        {dates.map((date, i) => {
-                            if (!date) return <div key={i} />;
-                            const dStr = date.toISOString().split('T')[0];
-                            const count = activityData[dStr] || 0;
-                            return (
-                                <div key={i} 
-                                     title={count > 0 ? `${count} Problems Solved` : ''}
-                                     className={classNames('aspect-square flex items-center justify-center text-[9px] border transition-colors', 
-                                     count > 0 ? 'bg-blue-600/20 border-blue-500/50 text-blue-400 font-bold' : 'border-slate-800/30 text-slate-700')}
-                                >
-                                    {date.getDate()}
-                                </div>
-                            )
-                        })}
-                    </div>
+              <div className="bg-slate-900/20 border border-slate-900 p-5 rounded-sm h-fit shadow-xl">
+                <div className="flex justify-between items-center mb-6 border-b border-slate-800 pb-2">
+                  <h3 className="text-[10px] font-bold text-white uppercase tracking-wider">{monthName} {year}</h3>
+                  <div className="flex gap-1">
+                    <button onClick={() => setMonthOffset(p => p - 1)} className="p-1 border border-slate-800 hover:bg-slate-800 cursor-pointer transition-all"><FiChevronLeft size={14} /></button>
+                    <button disabled={isCurrentMonth} onClick={() => setMonthOffset(p => p + 1)} className="p-1 border border-slate-800 hover:bg-slate-800 disabled:opacity-20 cursor-pointer transition-all"><FiChevronRight size={14} /></button>
+                  </div>
                 </div>
+                <div className="grid grid-cols-7 gap-1.5">
+                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => <div key={d} className="text-[8px] font-bold text-slate-700 text-center">{d}</div>)}
+                  {dates.map((date, i) => {
+                    if (!date) return <div key={i} />;
+                    
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const dStr = `${y}-${m}-${d}`;
+                    
+                    const count = activityData[dStr] || 0;
+                    const isSelected = selectedDate === dStr;
+
+                    return (
+                      <div key={i}
+                        onClick={() => setSelectedDate(isSelected ? null : dStr)}
+                        title={count > 0 ? `${count} Problems Solved` : ''}
+                        className={classNames(
+                          'aspect-square flex items-center justify-center text-[9px] rounded-full border transition-all cursor-pointer',
+                          count > 0 ? 'bg-green-600/20 border-green-500/50 text-green-400 font-bold' : 'border-slate-800/30 text-slate-700 hover:border-slate-600',
+                          isSelected && 'ring-1 ring-blue-500 ring-offset-2 ring-offset-slate-950'
+                        )}
+                      >
+                        {date.getDate()}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         )}

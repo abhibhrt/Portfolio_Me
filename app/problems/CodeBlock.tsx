@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCopy, FiCheck, FiFileText, FiCode, FiExternalLink } from 'react-icons/fi';
 
-// Light version for better control
+
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import cpp from 'react-syntax-highlighter/dist/esm/languages/hljs/cpp';
 import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import javascript from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
 
-// CUSTOM COLOR THEME (Extreme Neon/VS-Code Hybrid)
+
 const customNeonTheme: { [key: string]: React.CSSProperties } = {
   'hljs-keyword': { color: '#ff79c6', fontWeight: 'bold' }, // Pink
   'hljs-string': { color: '#50fa7b' },                     // Green
