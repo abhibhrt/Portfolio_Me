@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { 
   FiTrash2, FiPlus, FiCheckCircle,
@@ -29,6 +29,7 @@ export default function AdminProblems() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isOtherCategory, setIsOtherCategory] = useState(false);
   const { showAlert } = useAlert();
 
   const initialForm: ProblemItem = {
@@ -43,6 +44,15 @@ export default function AdminProblems() {
   };
 
   const [form, setForm] = useState<ProblemItem>(initialForm);
+
+  // Saari unique categories fetch karna existing problems se
+  const dynamicCategories = useMemo(() => {
+    const categories = problems.map(p => p.category);
+    const unique = Array.from(new Set(categories)).filter(Boolean);
+    // Agar "Array" default hai aur list mein nahi hai, toh use add kar dete hain
+    if (!unique.includes('Array')) unique.push('Array');
+    return unique.sort();
+  }, [problems]);
 
   useEffect(() => {
     const stored = window.localStorage.getItem('admin');
@@ -79,12 +89,14 @@ export default function AdminProblems() {
   const handleEdit = (problem: ProblemItem) => {
     setEditingId(problem._id || null);
     setForm({ ...problem });
+    setIsOtherCategory(false); // Reset "Other" state on edit
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const resetForm = () => {
     setEditingId(null);
     setForm(initialForm);
+    setIsOtherCategory(false);
   };
 
   const handleDelete = async (id: string) => {
@@ -136,11 +148,45 @@ export default function AdminProblems() {
                 
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold text-slate-400 uppercase">Category</label>
-                  <select value={form.category} onChange={e => setForm({...form, category: e.target.value})} className={inputStyle}>
-                    {['Array', 'String', 'Linked List', 'Tree', 'Graph', 'DP', 'Recursion', 'Other'].map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
+                  {!isOtherCategory ? (
+                    <select 
+                      value={form.category} 
+                      onChange={e => {
+                        if (e.target.value === 'OTHER_OPTION') {
+                          setIsOtherCategory(true);
+                          setForm({...form, category: ''});
+                        } else {
+                          setForm({...form, category: e.target.value});
+                        }
+                      }} 
+                      className={inputStyle}
+                    >
+                      {dynamicCategories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                      <option value="OTHER_OPTION" className="text-blue-400 font-bold">+ Add New Category</option>
+                    </select>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input 
+                        autoFocus
+                        placeholder="Enter new category"
+                        value={form.category} 
+                        onChange={e => setForm({...form, category: e.target.value})} 
+                        className={inputStyle} 
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setIsOtherCategory(false);
+                          setForm({...form, category: dynamicCategories[0]});
+                        }}
+                        className="p-2 bg-slate-700 hover:bg-slate-600 rounded-sm"
+                      >
+                        <FiX />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="md:col-span-2 space-y-1">
@@ -179,13 +225,13 @@ export default function AdminProblems() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-400 uppercase">Source Code</label>
-                <textarea value={form.code.sourceCode} onChange={e => setForm({...form, code: {...form.code, sourceCode: e.target.value}})} className={`${inputStyle} h-32 font-mono`} />
+                <label className="text-[11px] font-semibold text-slate-400 uppercase">Notes</label>
+                <textarea value={form.note} onChange={e => setForm({...form, note: e.target.value})} className={`${inputStyle} h-25`} />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-400 uppercase">Notes</label>
-                <textarea value={form.note} onChange={e => setForm({...form, note: e.target.value})} className={`${inputStyle} h-20`} />
+                <label className="text-[11px] font-semibold text-slate-400 uppercase">Source Code</label>
+                <textarea value={form.code.sourceCode} onChange={e => setForm({...form, code: {...form.code, sourceCode: e.target.value}})} className={`${inputStyle} h-72 font-mono`} />
               </div>
 
               <button disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 text-xs font-bold uppercase tracking-widest transition-all">

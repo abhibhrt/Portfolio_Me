@@ -111,8 +111,8 @@ export default function PublicProblemsPage() {
           <div className="h-64 flex flex-col items-center justify-center border border-slate-900 bg-slate-900/10"><FiLoader className="animate-spin text-blue-500 text-2xl mb-2" /></div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-9 bg-slate-900/20 border border-slate-900 rounded-sm overflow-hidden shadow-2xl">
-              <div className="bg-slate-900/50 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+            <div className="lg:col-span-9 bg-slate-900/20 border border-slate-900 rounded-sm overflow-hidden shadow-2xl flex flex-col">
+              <div className="bg-slate-900/50 px-6 py-4 border-b border-slate-800 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
                   <FiCheckCircle className="text-emerald-500" size={14} />
                   <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-100">
@@ -128,9 +128,11 @@ export default function PublicProblemsPage() {
                   </button>
                 )}
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-900/50 border-b border-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              
+              {/* --- Scrollable Container Starts Here --- */}
+              <div className="overflow-x-auto overflow-y-auto max-h-[600px] scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-slate-900/90 backdrop-blur-sm sticky top-0 z-10 border-b border-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     <tr>
                       <th className="px-6 py-4">Title & Details</th>
                       <th className="px-4 py-4 text-center">Difficulty</th>
@@ -189,6 +191,7 @@ export default function PublicProblemsPage() {
                   </tbody>
                 </table>
               </div>
+              {/* --- Scrollable Container Ends Here --- */}
             </div>
 
             <div className="lg:col-span-3 space-y-6">
