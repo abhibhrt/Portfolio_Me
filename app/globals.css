@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-*{
-  font-family: monospace;
+* {
+    font-family: monospace;
 }
 
 ::-webkit-scrollbar {
@@ -20,4 +20,35 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(168, 85, 247, 0.8);
+}
+
+@theme {
+    /* Custom Animation Define Karein */
+    --animate-letter-move: move 2s linear infinite;
+
+    @keyframes move {
+        0% {
+            left: 0;
+            opacity: 0;
+            transform: rotate(180deg);
+        }
+
+        35% {
+            left: 41%;
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        65% {
+            left: 59%;
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        100% {
+            left: 100%;
+            opacity: 0;
+            transform: rotate(-180deg);
+        }
+    }
 }

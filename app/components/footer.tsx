@@ -2,19 +2,20 @@
 
 import { motion } from 'framer-motion'
 import {
-    FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaEnvelope,
-    FaPhone, FaMapMarkerAlt, FaArrowUp, FaYoutube, FaTerminal
+    FaGithub, FaLinkedin, FaTwitter, FaEnvelope,
+    FaMapMarkerAlt, FaArrowUp, FaYoutube, FaTerminal
 } from 'react-icons/fa'
 import { SiLeetcode } from 'react-icons/si'
 import Link from 'next/link'
 import { useState } from 'react'
+import LoadingAnimation from './justComp'
 
 const socialLinks = [
     { icon: <FaGithub />, href: 'https://github.com/abhibhrt', label: 'GH' },
     { icon: <FaLinkedin />, href: 'https://linkedin.com/in/abhibhrt', label: 'LI' },
     { icon: <FaTwitter />, href: 'https://twitter.com/abhibhrt', label: 'TW' },
     { icon: <SiLeetcode />, href: 'https://leetcode.com/abhibhrt', label: 'LC' },
-    { icon: <FaYoutube />, href: 'https://youtube.com/@loopsafar', label: 'YT' },
+    // { icon: <FaYoutube />, href: 'https://youtube.com/@loopsafar', label: 'YT' },
 ]
 
 export default function Footer() {
@@ -49,7 +50,7 @@ export default function Footer() {
                         <div className="flex flex-col gap-3 font-mono text-[11px] text-slate-500">
                             <div className="flex items-center gap-3">
                                 <FaEnvelope className="text-blue-500" />
-                                <a href="mailto:abhibharti365@gmail.com" className="hover:text-white transition-colors">ABHIBHARTI365@GMAIL.COM</a>
+                                <a href="mailto:abhibharti365@gmail.com" className="hover:text-white transition-colors">abhibharti365@gmail.com</a>
                             </div>
                             <div className="flex items-center gap-3">
                                 <FaMapMarkerAlt className="text-blue-500" />
@@ -84,24 +85,8 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* --- NEWSLETTER --- */}
-                    <div className="lg:col-span-4 bg-slate-900/40 border border-slate-800 p-6 rounded-sm">
-                        <div className="flex items-center gap-2 mb-4 text-white">
-                            <FaTerminal className="text-blue-500 text-xs" />
-                            <h4 className="text-xs font-mono uppercase tracking-widest">Subscriber Portal</h4>
-                        </div>
-                        <p className="text-slate-400 text-xs mb-6 font-light">Receive technical updates and project briefings directly.</p>
-                        
-                        <form className="flex flex-col gap-2">
-                            <input
-                                type="email"
-                                placeholder="USER_EMAIL@DOMAIN.COM"
-                                className="bg-slate-950 border border-slate-800 px-4 py-3 text-xs font-mono text-white focus:outline-none focus:border-blue-600 transition-colors"
-                            />
-                            <button className="bg-blue-600 hover:bg-white hover:text-blue-600 text-white text-[10px] font-mono font-bold py-3 transition-all uppercase tracking-[0.2em]">
-                                Establish Connection
-                            </button>
-                        </form>
+                    <div className="lg:col-span-4">
+                        <LoadingAnimation/>
                     </div>
                 </div>
 
@@ -120,14 +105,14 @@ export default function Footer() {
                     </div>
 
                     <p className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
-                        © {currentYear} System_Abhishek_Bharti • Ver_2.0.0_Stable
+                        © {currentYear} Abhishek Bharti • Shahdol, Madhya Pradesh
                     </p>
 
                     <button 
                         onClick={scrollToTop}
                         className="group flex items-center gap-2 text-[10px] font-mono text-slate-500 hover:text-white transition-colors"
                     >
-                        RETURN_TO_TOP 
+                        Return To Top
                         <FaArrowUp className="group-hover:-translate-y-1 transition-transform text-blue-500" />
                     </button>
                 </div>

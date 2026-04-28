@@ -48,7 +48,7 @@ export default function Navbar() {
                             <img src="/icon.png" alt="Elite Logo" className="w-9 h-9 mt-2" />
                             <div className="flex flex-col">
                                 <span className="text-xl font-bold tracking-[0.2em] text-white font-mono">
-                                    LOOPSAFAR
+                                    abhibhrt
                                 </span>
                                 <span className="text-[8px] font-mono text-slate-500 uppercase tracking-widest leading-none">
                                     Software Developer

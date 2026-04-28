@@ -1,5 +1,5 @@
 import HomePage from './home/main.home';
-import YouTubeShortsSection from './home/embed.home';
+// import YouTubeShortsSection from './home/embed.home';
 import AboutSection from './home/about.home'
 
 const SHORT_IDS = [
@@ -34,7 +34,7 @@ export default function Home() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:24px_24px]" />
 
       <HomePage />
-      <YouTubeShortsSection shortIds={SHORT_IDS} />
+      {/* <YouTubeShortsSection shortIds={SHORT_IDS} /> */}
       <AboutSection />
     </div>
   );
