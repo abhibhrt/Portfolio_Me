@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LoadingAnimation = () => {
-  const letters = ['t','r', 'h', 'b', 'i', 'h', 'b', 'a'];
+  const letters = ['|', '|','|', '|','|', '|','|', '|','|', '|','|', '|'];
 
   return (
     <div className="flex items-center justify-center">

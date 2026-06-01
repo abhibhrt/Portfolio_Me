@@ -196,7 +196,7 @@ const ProjectManager: React.FC = () => {
                   <button
                     type="button"
                     onClick={removeSelectedImage}
-                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg cursor-pointer"
+                    className="cursor-pointer absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg cursor-pointer"
                   >
                     <FiX size={14} />
                   </button>
@@ -222,14 +222,14 @@ const ProjectManager: React.FC = () => {
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-6 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
+                className="cursor-pointer px-6 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
               >
                 Reset Fields
               </button>
               <button
                 type="submit"
                 disabled={uploading}
-                className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-2 text-[10px] font-black uppercase tracking-[0.2em] disabled:bg-slate-800 disabled:text-slate-600 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
+                className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white px-8 py-2 text-[10px] font-black uppercase tracking-[0.2em] disabled:bg-slate-800 disabled:text-slate-600 transition-all shadow-lg shadow-blue-900/20 cursor-pointer"
               >
                 {uploading ? 'Processing...' : 'Deploy Project'}
               </button>
@@ -254,7 +254,7 @@ const ProjectManager: React.FC = () => {
               {isAdmin && (
                 <button
                   onClick={() => handleDelete(project._id)}
-                  className="absolute top-2 right-2 p-2 bg-red-500/80 hover:bg-red-600 text-white rounded-sm backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  className="cursor-pointer absolute top-2 right-2 p-2 bg-red-500/80 hover:bg-red-600 text-white rounded-sm backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 >
                   <FiTrash2 size={12} />
                 </button>

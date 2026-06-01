@@ -9,6 +9,7 @@ import { SiLeetcode } from 'react-icons/si'
 import Link from 'next/link'
 import { useState } from 'react'
 import LoadingAnimation from './justComp'
+import PublicStories from './PublicStories'
 
 const socialLinks = [
     { icon: <FaGithub />, href: 'https://github.com/abhibhrt', label: 'GH' },
@@ -86,7 +87,8 @@ export default function Footer() {
                     </div>
 
                     <div className="lg:col-span-4">
-                        <LoadingAnimation/>
+                        {/* <LoadingAnimation/> */}
+                        <PublicStories/>
                     </div>
                 </div>
 

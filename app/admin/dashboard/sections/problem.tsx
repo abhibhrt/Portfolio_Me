@@ -135,7 +135,7 @@ export default function AdminProblems() {
                 </h3>
               </div>
               {editingId && (
-                <button onClick={resetForm} className="text-slate-400 hover:text-white"><FiX /></button>
+                <button onClick={resetForm} className="cursor-pointer text-slate-400 hover:text-white"><FiX /></button>
               )}
             </div>
 
@@ -181,7 +181,7 @@ export default function AdminProblems() {
                           setIsOtherCategory(false);
                           setForm({...form, category: dynamicCategories[0]});
                         }}
-                        className="p-2 bg-slate-700 hover:bg-slate-600 rounded-sm"
+                        className="cursor-pointer p-2 bg-slate-700 hover:bg-slate-600 rounded-sm"
                       >
                         <FiX />
                       </button>
@@ -234,7 +234,7 @@ export default function AdminProblems() {
                 <textarea value={form.code.sourceCode} onChange={e => setForm({...form, code: {...form.code, sourceCode: e.target.value}})} className={`${inputStyle} h-72 font-mono`} />
               </div>
 
-              <button disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 text-xs font-bold uppercase tracking-widest transition-all">
+              <button disabled={isSubmitting} className="cursor-pointer w-full bg-blue-600 hover:bg-blue-500 text-white py-3 text-xs font-bold uppercase tracking-widest transition-all">
                 {isSubmitting ? 'Processing...' : editingId ? 'Update Record' : 'Save Problem'}
               </button>
             </form>
@@ -259,8 +259,8 @@ export default function AdminProblems() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={() => handleEdit(p)} className="p-2 text-slate-500 hover:text-blue-400 transition-all"><FiEdit size={16}/></button>
-                    <button onClick={() => handleDelete(p._id!)} className="p-2 text-slate-500 hover:text-red-500 transition-all"><FiTrash2 size={16}/></button>
+                    <button onClick={() => handleEdit(p)} className="cursor-pointer p-2 text-slate-500 hover:text-blue-400 transition-all"><FiEdit size={16}/></button>
+                    <button onClick={() => handleDelete(p._id!)} className="cursor-pointer p-2 text-slate-500 hover:text-red-500 transition-all"><FiTrash2 size={16}/></button>
                   </div>
                 </div>
               ))

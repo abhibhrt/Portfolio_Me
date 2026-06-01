@@ -13,7 +13,7 @@ import {
 import { useAlert } from '@/app/hooks/useAlert';
 
 /* -------------------------------------------------------------------------- */
-/*                                   Types                                    */
+/* Types                                   */
 /* -------------------------------------------------------------------------- */
 
 interface Credentials {
@@ -28,7 +28,7 @@ interface AuthResponse {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  Component                                 */
+/* Component                                 */
 /* -------------------------------------------------------------------------- */
 
 const Login: React.FC = () => {
@@ -92,12 +92,12 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 bg-white border border-slate-200 rounded-md shadow-sm p-6 md:p-10 w-full max-w-md">
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 bg-slate-900 border border-slate-800 rounded-md shadow-xl p-6 md:p-10 w-full max-w-md">
         <div className="text-left mb-8">
-          <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-semibold text-slate-100 tracking-tight">
             Admin Login
           </h2>
-          <p className="text-slate-500 mt-1 text-sm">
+          <p className="text-slate-400 mt-1 text-sm">
             Please enter your details to sign in.
           </p>
         </div>
@@ -105,12 +105,12 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Username
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <FaUser className="text-slate-400 text-sm" />
+                <FaUser className="text-slate-500 text-sm" />
               </div>
               <input
                 name="username"
@@ -119,19 +119,19 @@ const Login: React.FC = () => {
                 value={credentials.username}
                 onChange={handleChange}
                 placeholder="Username"
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-md text-slate-900 text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-700 transition-all"
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <FaLock className="text-slate-400 text-sm" />
+                <FaLock className="text-slate-500 text-sm" />
               </div>
               <input
                 name="password"
@@ -140,12 +140,12 @@ const Login: React.FC = () => {
                 value={credentials.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="w-full pl-10 pr-12 py-2.5 bg-white border border-slate-300 rounded-md text-slate-900 text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-all"
+                className="w-full pl-10 pr-12 py-2.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-700 focus:border-slate-700 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
               >
                 {showPassword ? (
                   <FaEyeSlash size={16} />
@@ -160,11 +160,11 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-slate-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full bg-slate-100 text-slate-950 py-2.5 rounded-md font-bold text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
-                <div className="w-4 h-4 border-2 border-slate-400 border-t-white rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-slate-600 border-t-slate-950 rounded-full animate-spin" />
                 <span>Authenticating...</span>
               </>
             ) : (
@@ -176,8 +176,8 @@ const Login: React.FC = () => {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-          <p className="text-slate-400 text-[11px] uppercase tracking-widest font-medium">
+        <div className="mt-8 pt-6 border-t border-slate-800 text-center">
+          <p className="text-slate-600 text-[11px] uppercase tracking-widest font-medium">
             Secure Infrastructure Access
           </p>
         </div>

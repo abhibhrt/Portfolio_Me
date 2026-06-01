@@ -33,8 +33,8 @@ export default function AboutSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         className="lg:col-span-5"
                     >
-                        <div className="bg-slate-900 border border-slate-800 p-1 rounded-sm">
-                            <div className="border border-slate-800 p-8 bg-slate-950">
+                        <div className="p-1 rounded-sm">
+                            <div className="p-8 bg-slate-950">
                                 <div className="flex items-start justify-between mb-12">
                                     <div className="p-1 bg-blue-500/10 border border-blue-500/20 rounded-sm">
                                         <img className='w-10 h-10' src="https://upload.wikimedia.org/wikipedia/en/3/36/Indian_Institute_of_Information_Technology%2C_Bhopal_Logo.png" alt="Institute_Logo" />
@@ -114,7 +114,7 @@ export default function AboutSection() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="p-8 bg-blue-600 relative overflow-hidden group rounded-sm"
+                            className="p-8  relative overflow-hidden group rounded-sm"
                         >
                             {/* Decorative Grid Overlay */}
                             <div className="absolute inset-0 opacity-10 pointer-events-none"
@@ -122,7 +122,7 @@ export default function AboutSection() {
 
                             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                                 <div className="text-center md:text-left">
-                                    <h4 className="text-2xl font-black text-white leading-none mb-2">TECHNICAL DOSSIER</h4>
+                                    <h4 className="text-2xl font-black text-white leading-none mb-2">TECHNICAL RESUME</h4>
                                     <p className="text-blue-100 text-xs font-mono uppercase tracking-widest">Update: Dec 2025 • Ver. 4.0.2</p>
                                 </div>
 

@@ -90,8 +90,8 @@ export default function Contact() {
                                 </div>
                             )}
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3225.84032641172!2d81.57566595984088!3d23.18372121934614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398655b965f4535d%3A0xdb0bea3415fae9ce!2sUslapur!5e1!3m2!1sen!2sin!4v1768397994676!5m2!1sen!2sin"
-                                className={`w-full h-full  invert transition-opacity duration-700 ${isMapLoading ? 'opacity-0' : 'opacity-90'
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d40192.30845307541!2d77.41823089476793!3d23.23106021217998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1780330535483!5m2!1sen!2sin"
+                                className={`w-full h-full transition-opacity duration-700 ${isMapLoading ? 'opacity-0' : 'opacity-90'
                                     }`}
                                 onLoad={() => setIsMapLoading(false)}
                                 loading="lazy"
