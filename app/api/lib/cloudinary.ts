@@ -7,7 +7,7 @@ cloudinary.config({
 });
 
 /**
- * Upload image to Cloudinary (Next.js App Router compatible)
+ * Upload image or video to Cloudinary (Next.js App Router compatible)
  */
 export const uploadToCloud = async (file: File): Promise<any> => {
   if (!file || typeof file.arrayBuffer !== 'function') {
@@ -21,7 +21,8 @@ export const uploadToCloud = async (file: File): Promise<any> => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: 'projects_portfolio',
-        resource_type: 'image',
+        // 'auto' lagane se image aur video dono upload ho jayenge
+        resource_type: 'auto', 
       },
       (error, result) => {
         if (error) return reject(error);
@@ -34,10 +35,12 @@ export const uploadToCloud = async (file: File): Promise<any> => {
 };
 
 /**
- * Delete image from Cloudinary
+ * Delete asset from Cloudinary
  */
 export const deleteFromCloud = async (publicId: string): Promise<any> => {
   return new Promise((resolve, reject) => {
+    // Note: Video delete karne ke liye kabhi-kabhi resource_type specify karna padta hai,
+    // par generic destroy query zyadatar kaam kar jati hai.
     cloudinary.uploader.destroy(publicId, (error, result) => {
       if (error) reject(error);
       else resolve(result);
