@@ -97,8 +97,8 @@ const PublicStories: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 text-xs tracking-widest uppercase">
-        Loading Stories...
+      <div className="bg-slate-950 flex items-center justify-center text-slate-400 text-xs tracking-widest uppercase">
+        ...
       </div>
     );
   }
