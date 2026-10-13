@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Login from './auth/page';
 import Dashboard from './dashboard/page';
 
@@ -9,46 +10,31 @@ const LoginPage: React.FC = () => {
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
   useEffect(() => {
-    const checkAuth = (): void => {
-      if (typeof window === 'undefined') return;
-
-      const admin = window.localStorage.getItem('admin');
-      setLoggedIn(Boolean(admin));
-      setIsChecking(false);
-    };
-
-    checkAuth();
-
-    const handleAdminLogin = (): void => {
-      checkAuth();
-    };
-
-    const handleAdminLogout = (): void => {
-      checkAuth();
-    };
-
-    const handleStorageChange = (event: StorageEvent): void => {
-      if (event.key === 'admin') {
-        checkAuth();
+    const verifyAuth = async (): Promise<void> => {
+      try {
+        const response = await axios.get('/api/dashboard/my-profile');
+        
+        if (response.data?.success) {
+          setLoggedIn(true);
+        } else {
+          setLoggedIn(false);
+        }
+      } catch (error) {
+        setLoggedIn(false);
+      } finally {
+        setIsChecking(false);
       }
     };
 
-    window.addEventListener('admin-login', handleAdminLogin as EventListener);
-    window.addEventListener('admin-logout', handleAdminLogout as EventListener);
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('admin-login', handleAdminLogin as EventListener);
-      window.removeEventListener('admin-logout', handleAdminLogout as EventListener);
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    verifyAuth();
   }, []);
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-pulse">
-          <div className="h-8 w-32 bg-gray-200 rounded" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="animate-pulse flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-slate-600 border-t-slate-200 rounded-full animate-spin" />
+          <span className="text-slate-400 text-sm tracking-wide">Verifying session...</span>
         </div>
       </div>
     );

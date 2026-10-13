@@ -10,6 +10,11 @@ const ProblemSchema = new Schema({
     enum: ['Easy', 'Medium', 'Hard'],
     default: 'Easy'
   },
+  status: {
+    type: String,
+    enum: ['Solved', 'Attempted', 'Unsolved'],
+    default: 'Unsolved'
+  },
   note: { type: String, default: '' },
   code: {
     language: { type: String, default: '' },

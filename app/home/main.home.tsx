@@ -42,7 +42,7 @@ export default function HomePage() {
     }, [])
 
     return (
-        <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-emerald-500/30">
+        <div className="min-h-screen text-slate-200 selection:bg-emerald-500/30">
             <div className="relative z-10">
                 {/* HERO SECTION */}
                 <div className="min-h-screen flex items-center justify-center px-6 lg:px-8">

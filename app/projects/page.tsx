@@ -37,14 +37,14 @@ export default function Projects() {
 
   return (
     <section
-      className="relative bg-slate-950 py-24 pt-30 px-6 overflow-hidden"
+      className="relative py-24 pt-30 px-6 overflow-hidden"
       id="Projects"
     >
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-16 space-y-2">
-          <div className="flex items-center gap-2 text-blue-500 font-mono text-[10px] tracking-[0.3em]">
-            <span className="h-[1px] w-8 bg-blue-500" />
+          <div className="flex items-center gap-2 text-blue-400 font-mono text-[10px] tracking-[0.3em]">
+            <span className="h-[1px] w-8 bg-blue-400" />
             abhibhrt/projects
           </div>
           <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
@@ -53,9 +53,9 @@ export default function Projects() {
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-500">
-            <FiLoader className="animate-spin mb-4" size={24} />
-            <span className="text-[10px] font-mono uppercase tracking-[0.2em]">Syncing_Database...</span>
+          <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+            <FiLoader className="animate-spin mb-4 text-blue-400" size={24} />
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em]">Fetching Projects...</span>
           </div>
         ) : (
           <AnimatePresence mode="wait">
@@ -72,8 +72,8 @@ export default function Projects() {
         )}
 
         {!loading && projects.length === 0 && (
-          <div className="text-center py-20 border border-dashed border-slate-800 rounded-sm">
-            <span className="text-[10px] font-mono uppercase text-slate-600">No_Active_Deployments_Found</span>
+          <div className="text-center py-20 border border-dashed border-white/10 rounded-lg bg-black/20 backdrop-blur-md">
+            <span className="text-[10px] font-mono uppercase text-slate-500">No Projects Found</span>
           </div>
         )}
       </div>
@@ -100,38 +100,40 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       viewport={{ once: true }}
-      className="group relative bg-slate-900/30 border border-slate-800 hover:border-blue-500/50 transition-all duration-500 rounded-lg overflow-hidden"
+      className="group relative bg-black/40 backdrop-blur-xl border border-white/10 hover:border-blue-500/50 transition-all duration-500 rounded-lg overflow-hidden shadow-xl"
     >
       {/* Card Top Bar */}
-      <div className="flex justify-between items-center px-4 py-2 border-b border-slate-800 bg-slate-900/50">
+      <div className="flex justify-between items-center px-4 py-2 border-b border-white/10 bg-black/60">
         <div className="flex gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-700 group-hover:bg-blue-500 transition-colors" />
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-700" />
+          <div className="w-1.5 h-1.5 rounded-full bg-slate-600 group-hover:bg-blue-400 transition-colors" />
+          <div className="w-1.5 h-1.5 rounded-full bg-slate-600" />
         </div>
-        <span className="text-[9px] font-mono text-slate-500 tracking-widest uppercase">
+        <span className="text-[9px] font-mono text-slate-400 tracking-widest uppercase">
           ID: {project._id.slice(-6).toUpperCase()}
         </span>
       </div>
 
       {/* Image Section */}
-      <div className="relative aspect-video overflow-hidden border-b border-slate-800">
+      <div className="relative aspect-video overflow-hidden border-b border-white/10">
         <img
           src={project.url}
           alt={project.title}
-          className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+          className="w-full h-full object-cover grayscale-[0.4] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
         />
-        <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
           <a
             href={project.github || '#'}
             target="_blank"
-            className="p-3 bg-white text-slate-950 hover:bg-blue-500 hover:text-white transition-all rounded-sm"
+            rel="noopener noreferrer"
+            className="p-3 bg-white text-black hover:bg-blue-600 hover:text-white transition-all rounded-sm shadow-lg"
           >
             <FiGithub size={18} />
           </a>
           <a
             href={project.visit || '#'}
             target="_blank"
-            className="p-3 bg-white text-slate-950 hover:bg-blue-500 hover:text-white transition-all rounded-sm"
+            rel="noopener noreferrer"
+            className="p-3 bg-white text-black hover:bg-blue-600 hover:text-white transition-all rounded-sm shadow-lg"
           >
             <FiExternalLink size={18} />
           </a>
@@ -140,16 +142,16 @@ function ProjectCard({
 
       {/* Content Section */}
       <div className="p-6 space-y-4">
-        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 uppercase">
-          <FiCalendar className="text-blue-500" />
+        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 uppercase">
+          <FiCalendar className="text-blue-400" />
           {displayDate}
         </div>
 
-        <h3 className="text-xl font-bold text-white uppercase group-hover:text-blue-400 transition-colors">
+        <h3 className="text-xl font-bold text-white uppercase group-hover:text-blue-400 transition-colors tracking-tight">
           {project.title}
         </h3>
 
-        <p className="text-slate-400 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
+        <p className="text-slate-300 text-sm leading-relaxed line-clamp-2 min-h-[40px]">
           {project.description}
         </p>
 
@@ -160,10 +162,11 @@ function ProjectCard({
             return (
               <span
                 key={i}
-                className={`text-[9px] font-mono uppercase tracking-widest px-2 py-1 border ${isPrivate
-                    ? 'border-red-900/50 text-red-500 bg-red-950/20'
-                    : 'border-slate-800 text-slate-500 bg-slate-800/30'
-                  }`}
+                className={`text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 border rounded-sm ${
+                  isPrivate
+                    ? 'border-red-500/30 text-red-400 bg-red-950/20'
+                    : 'border-white/10 text-slate-300 bg-white/5'
+                }`}
               >
                 {tag}
               </span>

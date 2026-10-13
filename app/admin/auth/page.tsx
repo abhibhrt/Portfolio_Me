@@ -13,7 +13,7 @@ import {
 import { useAlert } from '@/app/hooks/useAlert';
 
 /* -------------------------------------------------------------------------- */
-/* Types                                   */
+/* Types                                      */
 /* -------------------------------------------------------------------------- */
 
 interface Credentials {
@@ -28,7 +28,7 @@ interface AuthResponse {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Component                                 */
+/* Component                                  */
 /* -------------------------------------------------------------------------- */
 
 const Login: React.FC = () => {
@@ -52,13 +52,13 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post<AuthResponse>('/api/auth', credentials);
+      // Updated to call the new signin API route
+      const response = await axios.post<AuthResponse>('/api/auth/signin', credentials);
+      
       if (response.data?.success) {
-        window.localStorage.setItem('admin', JSON.stringify(response.data));
-        window.dispatchEvent(new Event('admin-login'));
-
         showAlert('Access granted. Redirecting...', 'success');
-        router.push('/admin');
+        // Redirect to protected dashboard
+        router.push('/admin/dashboard');
       } else {
         showAlert(
           response.data?.message ?? 'Invalid credentials',

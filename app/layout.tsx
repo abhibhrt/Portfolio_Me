@@ -26,13 +26,27 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-900 text-white`}>
+      <body className={`${inter.className} relative min-h-screen w-full overflow-x-hidden bg-[#09090b] text-white`}>
+        <div 
+          className="pointer-events-none fixed inset-0 z-0 opacity-30"
+          style={{
+            backgroundImage: `radial-gradient(#a1a1aa 1px, transparent 1px)`,
+            backgroundSize: '24px 24px',
+            maskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)'
+          }}
+        />
+        
+        {/* --- Main App Layout --- */}
         <AlertProvider>
           <Alert />
           <Navbar />
-          {children}
+          <main className="relative z-10 flex flex-col min-h-screen">
+            {children}
+          </main>
           <Footer />
         </AlertProvider>
+
       </body>
     </html>
   )

@@ -1,6 +1,6 @@
 import HomePage from './home/main.home';
 // import YouTubeShortsSection from './home/embed.home';
-import AboutSection from './home/about.home'
+import AboutSection from './home/about.home';
 
 const SHORT_IDS = [
   'RP-dHcdcJh4',
@@ -22,17 +22,7 @@ const SHORT_IDS = [
 
 export default function Home() {
   return (
-    <div className="relative h-full overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      {/* Animated background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-purple-500 opacity-20 blur-3xl mix-blend-multiply animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full bg-blue-500 opacity-20 blur-3xl mix-blend-multiply animate-pulse delay-1000" />
-        <div className="absolute top-3/4 left-1/2 h-72 w-72 rounded-full bg-cyan-500 opacity-20 blur-3xl mix-blend-multiply animate-pulse delay-500" />
-      </div>
-
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:24px_24px]" />
-
+    <div className="flex flex-col gap-12 pb-16">
       <HomePage />
       {/* <YouTubeShortsSection shortIds={SHORT_IDS} /> */}
       <AboutSection />

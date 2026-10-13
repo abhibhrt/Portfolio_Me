@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import {
   FiMenu,
   FiX,
@@ -18,7 +19,7 @@ import ProjectManager from './sections/projects';
 import Story from './sections/stories';
 
 /* -------------------------------------------------------------------------- */
-/* Types                                   */
+/* Types                                      */
 /* -------------------------------------------------------------------------- */
 
 type SectionKey = 'progress' | 'projects' | 'story';
@@ -30,7 +31,7 @@ interface SectionConfig {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Component                                 */
+/* Component                                  */
 /* -------------------------------------------------------------------------- */
 
 const AdminDashboard: React.FC = () => {
@@ -59,13 +60,17 @@ const AdminDashboard: React.FC = () => {
 
   /* ------------------------------- Handlers -------------------------------- */
 
-  const handleLogout = (): void => {
-    if (typeof window === 'undefined') return;
+  const handleLogout = async (): Promise<void> => {
     if (!window.confirm('Terminate administrative session?')) return;
 
-    window.localStorage.removeItem('admin');
-    window.dispatchEvent(new Event('admin-logout'));
-    router.push('/admin');
+    try {
+      // Call signout API to clear the HTTP-only cookie
+      await axios.post('/api/auth/signout');
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   const renderContent = (): React.ReactNode => {
@@ -118,10 +123,11 @@ const AdminDashboard: React.FC = () => {
               <button
                 key={key}
                 onClick={() => setActiveSection(key)}
-                className={`w-full flex items-center h-12 transition-all duration-300 relative group overflow-hidden cursor-pointer rounded-sm ${activeSection === key
+                className={`w-full flex items-center h-12 transition-all duration-300 relative group overflow-hidden cursor-pointer rounded-sm ${
+                  activeSection === key
                     ? 'text-white bg-blue-600/10'
                     : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
-                  }`}
+                }`}
               >
                 {activeSection === key && (
                   <motion.div
@@ -132,8 +138,9 @@ const AdminDashboard: React.FC = () => {
 
                 <div className="flex items-center px-4 z-10">
                   <Icon
-                    className={`text-lg flex-shrink-0 ${activeSection === key ? 'text-blue-500' : ''
-                      }`}
+                    className={`text-lg flex-shrink-0 ${
+                      activeSection === key ? 'text-blue-500' : ''
+                    }`}
                   />
 
                   <AnimatePresence>
