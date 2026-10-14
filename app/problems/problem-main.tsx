@@ -5,9 +5,10 @@ import axios from 'axios';
 import classNames from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    FiChevronDown, FiChevronRight, FiStar, FiLoader, FiCode, FiCheckCircle, FiFileText, FiClock, FiAlertCircle, FiEdit3, FiX
+    FiChevronDown, FiChevronRight, FiStar, FiLoader, FiCode, FiCheckCircle, FiFileText, FiClock, FiAlertCircle, FiEdit3, FiX, FiTrash2, FiSave
 } from 'react-icons/fi';
 import { SiLeetcode, SiGeeksforgeeks } from 'react-icons/si';
+import ConfirmModal from '@/app/components/confirm-modal';
 
 interface ProblemItem {
     _id: string;
@@ -22,28 +23,31 @@ interface ProblemItem {
     code: { language: string; sourceCode: string; };
 }
 
-interface DSAMainProps {
+interface DSAProblemsProps {
     problems: ProblemItem[];
     loading: boolean;
     selectedDate: string | null;
     isAuthenticated: boolean;
     onProblemUpdate: (updatedProblem: ProblemItem) => void;
+    onProblemDelete: (id: string) => void;
     setViewCode: (problem: ProblemItem | null) => void;
     setTab: (tab: 'code' | 'notes') => void;
 }
 
-export default function DSAMain({
+export default function DSAProblems({
     problems,
     loading,
     selectedDate,
     isAuthenticated,
     onProblemUpdate,
+    onProblemDelete,
     setViewCode,
     setTab
-}: DSAMainProps) {
+}: DSAProblemsProps) {
     const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
     const [updatingId, setUpdatingId] = useState<string | null>(null);
     const [editModalProblem, setEditModalProblem] = useState<ProblemItem | null>(null);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
 
     const categorizedProblems = useMemo(() => {
         let filtered = problems;
@@ -73,7 +77,7 @@ export default function DSAMain({
         if (!isAuthenticated) return;
         try {
             setUpdatingId(id);
-            const res = await axios.put(`/api/dashboard/problems?id=${id}`, { status: newStatus });
+            const res = await axios.put(`/api/admin/problems/${id}`, { status: newStatus });
             if (res.data) {
                 onProblemUpdate(res.data);
             }
@@ -84,15 +88,19 @@ export default function DSAMain({
         }
     };
 
-    const handleSaveProblem = async (updated: ProblemItem) => {
+    const handleDeleteConfirm = async (choice: boolean) => {
+        if (!choice || !deleteId) {
+            setDeleteId(null);
+            return;
+        }
+
         try {
-            const res = await axios.put(`/api/dashboard/problems?id=${updated._id}`, updated);
-            if (res.data) {
-                onProblemUpdate(res.data);
-            }
-            setEditModalProblem(null);
+            await axios.delete(`/api/admin/problems/${deleteId}`);
+            onProblemDelete(deleteId);
         } catch (error) {
-            console.error("Failed to update problem:", error);
+            console.error("Failed to purge problem module:", error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -127,21 +135,31 @@ export default function DSAMain({
                         Object.entries(categorizedProblems).map(([category, items]) => {
                             const isExpanded = !!expandedCategories[category];
                             const solvedCount = items.filter(i => i.status === 'Solved').length;
+                            const totalCount = items.length;
+                            const progressPercent = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
 
                             return (
                                 <div key={category} className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden shadow-xl transition-all">
                                     <button
                                         onClick={() => toggleCategory(category)}
-                                        className="w-full flex items-center justify-between p-5 bg-white/5 hover:bg-white/10 transition-colors text-left cursor-pointer"
+                                        className="w-full flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white/5 hover:bg-white/10 transition-colors text-left cursor-pointer gap-4"
                                     >
                                         <div className="flex items-center gap-3">
                                             {isExpanded ? <FiChevronDown className="text-blue-400" size={18} /> : <FiChevronRight className="text-slate-400" size={18} />}
                                             <span className="text-sm font-bold text-white font-mono uppercase tracking-wider">{category}</span>
-                                            <span className="text-[10px] font-mono text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-sm">
-                                                Solved: {solvedCount} / Total: {items.length}
+                                        </div>
+
+                                        <div className="flex items-center gap-4 w-full sm:w-64">
+                                            <div className="flex-1 bg-white/10 h-2 rounded-full overflow-hidden">
+                                                <div 
+                                                    className="bg-blue-500 h-full transition-all duration-500" 
+                                                    style={{ width: `${progressPercent}%` }}
+                                                />
+                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 whitespace-nowrap">
+                                                {solvedCount}/{totalCount} ({progressPercent}%)
                                             </span>
                                         </div>
-                                        <span className="text-xs font-mono text-slate-500">{items.length} items</span>
                                     </button>
 
                                     <AnimatePresence>
@@ -162,7 +180,8 @@ export default function DSAMain({
                                                             <th className="px-4 py-4 text-center">Status</th>
                                                             <th className="px-4 py-4 text-center">Revision</th>
                                                             <th className="px-4 py-4 text-center">Notes</th>
-                                                            <th className="px-4 py-4 text-center">Code / Edit</th>
+                                                            <th className="px-4 py-4 text-center">Code</th>
+                                                            {isAuthenticated && <th className="px-4 py-4 text-center">Actions</th>}
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-white/5">
@@ -171,7 +190,7 @@ export default function DSAMain({
                                                                 <td className="px-6 py-4">
                                                                     <div className="text-sm text-white font-bold">{item.problemName}</div>
                                                                     <div className="text-[10px] text-slate-400 font-mono uppercase mt-1">
-                                                                        {item.date ? item.date.split('T')[0] : 'N/A'} • {item.code?.language || 'Code'}
+                                                                        {item.date ? item.date.split('T')[0] : 'N/A'} • {item.code?.language || 'No Code'}
                                                                     </div>
                                                                 </td>
                                                                 <td className="px-4 py-4 text-center">
@@ -215,35 +234,48 @@ export default function DSAMain({
                                                                     {item.note ? (
                                                                         <button 
                                                                             onClick={() => handleOpenModal(item, 'notes')} 
-                                                                            className="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer" 
+                                                                            className="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs" 
                                                                             title="View Notes"
                                                                         >
-                                                                            <FiFileText size={16} />
+                                                                            <FiFileText size={15} />
                                                                         </button>
                                                                     ) : (
                                                                         <span className="text-slate-700 text-[9px]">--</span>
                                                                     )}
                                                                 </td>
                                                                 <td className="px-4 py-4 text-center">
-                                                                    <div className="flex items-center justify-center gap-2">
+                                                                    {item.code?.sourceCode ? (
                                                                         <button 
                                                                             onClick={() => handleOpenModal(item, 'code')} 
-                                                                            className="p-2 bg-white/5 border border-white/10 hover:bg-blue-600 text-slate-400 hover:text-white transition-all rounded-sm cursor-pointer shadow-lg" 
+                                                                            className="text-slate-400 hover:text-blue-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs" 
                                                                             title="View Code"
                                                                         >
-                                                                            <FiCode size={14} />
+                                                                            <FiCode size={15} />
                                                                         </button>
-                                                                        {isAuthenticated && (
+                                                                    ) : (
+                                                                        <span className="text-slate-700 text-[9px]">--</span>
+                                                                    )}
+                                                                </td>
+                                                                {isAuthenticated && (
+                                                                    <td className="px-4 py-4 text-center">
+                                                                        <div className="flex items-center justify-center gap-3">
                                                                             <button 
                                                                                 onClick={() => setEditModalProblem(item)} 
-                                                                                className="p-2 bg-blue-600/20 border border-blue-500/40 hover:bg-blue-600 text-blue-400 hover:text-white transition-all rounded-sm cursor-pointer" 
+                                                                                className="text-blue-400 hover:text-white transition-colors cursor-pointer" 
                                                                                 title="Edit Problem"
                                                                             >
-                                                                                <FiEdit3 size={14} />
+                                                                                <FiEdit3 size={15} />
                                                                             </button>
-                                                                        )}
-                                                                    </div>
-                                                                </td>
+                                                                            <button 
+                                                                                onClick={() => setDeleteId(item._id)} 
+                                                                                className="text-red-400 hover:text-white transition-colors cursor-pointer" 
+                                                                                title="Delete Problem"
+                                                                            >
+                                                                                <FiTrash2 size={15} />
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                )}
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -268,20 +300,52 @@ export default function DSAMain({
                     <EditProblemModal 
                         problem={editModalProblem} 
                         onClose={() => setEditModalProblem(null)} 
-                        onSave={handleSaveProblem} 
+                        onSuccess={onProblemUpdate} 
                     />
                 )}
             </AnimatePresence>
+
+            {/* Confirm Delete Modal */}
+            <ConfirmModal
+                isOpen={!!deleteId}
+                title="Purge Problem Module"
+                message="Are you sure you want to delete this DSA problem entry?"
+                onYes={() => handleDeleteConfirm(true)}
+                onNo={() => handleDeleteConfirm(false)}
+            />
         </>
     );
 }
 
-function EditProblemModal({ problem, onClose, onSave }: { problem: ProblemItem; onClose: () => void; onSave: (p: ProblemItem) => void }) {
+function EditProblemModal({ 
+    problem, 
+    onClose, 
+    onSuccess 
+}: { 
+    problem: ProblemItem; 
+    onClose: () => void; 
+    onSuccess: (p: ProblemItem) => void 
+}) {
     const [formData, setFormData] = useState<ProblemItem>({ ...problem });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSave(formData);
+        setLoading(true);
+        setError(null);
+
+        try {
+            const res = await axios.put(`/api/admin/problems/${formData._id}`, formData);
+            if (res.data) {
+                onSuccess(res.data);
+                onClose();
+            }
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to update problem module');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -290,28 +354,30 @@ function EditProblemModal({ problem, onClose, onSave }: { problem: ProblemItem; 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-slate-900 border border-white/10 rounded-lg max-w-xl w-full p-6 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto"
+                className="bg-black/90 border border-white/10 rounded-lg max-w-xl w-full p-6 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto backdrop-blur-xl"
             >
                 <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                    <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">Edit Problem: {formData.problemName}</h3>
-                    <button onClick={onClose} className="text-slate-400 hover:text-white"><FiX size={18} /></button>
+                    <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
+                        Edit Problem: {formData.problemName}
+                    </h3>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white cursor-pointer"><FiX size={18} /></button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">Notes</label>
+                        <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Notes</label>
                         <textarea 
                             rows={3}
                             value={formData.note || ''}
                             onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                            className="w-full bg-black/50 border border-white/10 rounded-sm p-3 text-white text-xs mt-1 focus:outline-none focus:border-blue-400 font-mono"
+                            className="w-full bg-black/50 border border-white/10 rounded-sm p-3 text-white text-xs mt-1 focus:outline-none focus:border-blue-400 font-mono resize-none"
                             placeholder="Add your approach or notes..."
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-[10px] font-mono text-slate-400 uppercase">Language</label>
+                            <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Language</label>
                             <input 
                                 type="text"
                                 value={formData.code?.language || ''}
@@ -333,19 +399,27 @@ function EditProblemModal({ problem, onClose, onSave }: { problem: ProblemItem; 
                     </div>
 
                     <div>
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">Source Code</label>
+                        <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Source Code</label>
                         <textarea 
                             rows={6}
                             value={formData.code?.sourceCode || ''}
                             onChange={(e) => setFormData({ ...formData, code: { ...formData.code, sourceCode: e.target.value } })}
-                            className="w-full bg-black/50 border border-white/10 rounded-sm p-3 text-white text-xs font-mono mt-1 focus:outline-none focus:border-blue-400"
+                            className="w-full bg-black/50 border border-white/10 rounded-sm p-3 text-white text-xs font-mono mt-1 focus:outline-none focus:border-blue-400 resize-none"
                             placeholder="Paste your solution code here..."
                         />
                     </div>
 
+                    {error && (
+                        <p className="text-xs font-mono text-red-400 bg-red-950/20 p-2 rounded border border-red-500/20">
+                            {error}
+                        </p>
+                    )}
+
                     <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-                        <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 text-slate-400 text-xs font-mono uppercase hover:bg-white/5 rounded-sm">Cancel</button>
-                        <button type="submit" className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono uppercase rounded-sm shadow-lg">Save Changes</button>
+                        <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 text-slate-400 text-xs font-mono uppercase hover:bg-white/5 rounded-sm cursor-pointer">Cancel</button>
+                        <button type="submit" disabled={loading} className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono uppercase rounded-sm shadow-lg flex items-center gap-2 cursor-pointer disabled:opacity-50">
+                            <FiSave size={14} /> {loading ? 'Saving...' : 'Save Changes'}
+                        </button>
                     </div>
                 </form>
             </motion.div>

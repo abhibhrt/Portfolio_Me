@@ -1,11 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { AnimatePresence } from 'framer-motion';
-import DSAHeader from './DSAHeader';
-import DSAMain from './DSAMain';
+import Progress from './problems-progress';
+import DSAProblems from './problem-main';
 import { CodeModal } from './CodeBlock';
+import AddProblemModal from './add-problem-modal';
+import { useAuthStore } from '@/app/store/useAuthStore';
 
 interface ProblemItem {
     _id: string;
@@ -25,43 +27,43 @@ export default function ProblemsPage() {
     const [loading, setLoading] = useState(true);
     const [monthOffset, setMonthOffset] = useState(0);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [viewCode, setViewCode] = useState<ProblemItem | null>(null);
     const [tab, setTab] = useState<'code' | 'notes'>('code');
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-    useEffect(() => {
-        verifyAuthAndFetchData();
-    }, []);
+    const { isAdmin } = useAuthStore();
 
-    const verifyAuthAndFetchData = async () => {
-        try {
-            // Check if the user has an active session cookie
-            const authRes = await axios.get('/api/dashboard/my-profile');
-            if (authRes.data?.success) {
-                setIsAuthenticated(true);
-            }
-        } catch (error) {
-            setIsAuthenticated(false);
-        } finally {
-            fetchProblems();
-        }
-    };
-
-    const fetchProblems = async () => {
+    const fetchProblems = useCallback(async () => {
         try {
             setLoading(true);
-            // Fetching from the public problems route
             const res = await axios.get('/api/problem');
             setProblems(res.data || []);
         } catch (error) {
-            console.error("Failed to fetch problems from /api/problems:", error);
+            console.error("Failed to fetch problems:", error);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchProblems();
+    }, [fetchProblems]);
+
+    // Extract unique categories from current problems list
+    const existingCategories = useMemo(() => {
+        const cats = new Set<string>();
+        problems.forEach(p => {
+            if (p.category) cats.add(p.category);
+        });
+        return Array.from(cats);
+    }, [problems]);
 
     const handleProblemUpdate = (updatedProblem: ProblemItem) => {
         setProblems(prev => prev.map(p => p._id === updatedProblem._id ? updatedProblem : p));
+    };
+
+    const handleProblemDelete = (deletedId: string) => {
+        setProblems(prev => prev.filter(p => p._id !== deletedId));
     };
 
     return (
@@ -69,22 +71,24 @@ export default function ProblemsPage() {
             <div className="max-w-7xl mx-auto space-y-12">
                 
                 {/* Header Section */}
-                <DSAHeader 
+                <Progress 
                     problems={problems}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                     monthOffset={monthOffset}
                     setMonthOffset={setMonthOffset}
-                    isAuthenticated={isAuthenticated}
+                    isAdmin={isAdmin}
+                    onOpenAddModal={() => setIsAddModalOpen(true)}
                 />
 
                 {/* Main Table & Category Accordion Section */}
-                <DSAMain 
+                <DSAProblems 
                     problems={problems}
                     loading={loading}
                     selectedDate={selectedDate}
-                    isAuthenticated={isAuthenticated}
+                    isAuthenticated={isAdmin}
                     onProblemUpdate={handleProblemUpdate}
+                    onProblemDelete={handleProblemDelete}
                     setViewCode={setViewCode}
                     setTab={setTab}
                 />
@@ -100,6 +104,14 @@ export default function ProblemsPage() {
                     />
                 )}
             </AnimatePresence>
+
+            {/* Add Problem Modal */}
+            <AddProblemModal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                onSuccess={fetchProblems}
+                existingCategories={existingCategories}
+            />
         </section>
     );
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '../../lib/db';
-import Story from '../../models/story.model';
-import { deleteFromCloud } from '../../lib/cloudinary';
+import { connectDB } from '@/app/api/lib/db';
+import Story from '@/app/api/models/story.model';
+import { deleteFromCloud } from '@/app/api/lib/cloudinary';
 
 export async function DELETE(
   req: NextRequest,

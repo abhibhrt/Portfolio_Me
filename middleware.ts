@@ -6,10 +6,10 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Protect both dashboard pages and dashboard API routes if needed
+  // Protect both admin pages and admin API routes if needed
   const isProtectedRoute = 
-    path.startsWith('/dashboard') || 
-    path.startsWith('/api/dashboard');
+    path.startsWith('/admin') || 
+    path.startsWith('/api/admin');
 
   if (isProtectedRoute) {
     const token = request.cookies.get('token')?.value;
@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
 // Add all paths you want to protect here
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/api/dashboard/:path*'
+    '/admin/:path*',
+    '/api/admin/:path*'
   ],
 };

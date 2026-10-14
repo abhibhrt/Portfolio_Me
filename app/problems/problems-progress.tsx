@@ -2,7 +2,8 @@
 
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown, FiPlus } from 'react-icons/fi';
+import PageHeader from '@/app/components/page-header';
 
 interface ProblemItem {
     _id: string;
@@ -11,23 +12,25 @@ interface ProblemItem {
     status: 'Solved' | 'Attempted' | 'Unsolved';
 }
 
-interface DSAHeaderProps {
+interface ProgressProps {
     problems: ProblemItem[];
     selectedDate: string | null;
     setSelectedDate: (date: string | null) => void;
     monthOffset: number;
     setMonthOffset: React.Dispatch<React.SetStateAction<number>>;
-    isAuthenticated: boolean;
+    isAdmin: boolean;
+    onOpenAddModal: () => void;
 }
 
-export default function DSAHeader({
+export default function Progress({
     problems,
     selectedDate,
     setSelectedDate,
     monthOffset,
     setMonthOffset,
-    isAuthenticated
-}: DSAHeaderProps) {
+    isAdmin,
+    onOpenAddModal
+}: ProgressProps) {
 
     // Activity Data for Calendar
     const activityData = useMemo(() => {
@@ -69,23 +72,22 @@ export default function DSAHeader({
 
     return (
         <div className="space-y-12">
-            {/* Header & Admin Mode Toggle */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                <div>
-                    <div className="flex items-center gap-2 text-blue-400 font-mono text-[10px] tracking-[0.3em] mb-2">
-                        <span className="h-[1px] w-8 bg-blue-400" />
-                        abhibhrt/problems
-                    </div>
-                    <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
-                        DSA <span className="text-slate-500">Modules</span>
-                    </h2>
-                </div>
-
-                <div className="flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-lg text-xs font-mono">
-                    <span className="text-slate-400">Mode:</span>
-                    {isAuthenticated ? 'ADMIN' : 'GUEST'}
-                </div>
-            </div>
+            {/* Common Header & Admin Action Button */}
+            <PageHeader 
+                name="DSA Modules" 
+                path="abhibhrt/problems"
+                action={
+                    isAdmin && (
+                        <button
+                            onClick={onOpenAddModal}
+                            className="cursor-pointer w-12 h-12 rounded-full bg-blue-600/30 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+                            title="Add New Problem"
+                        >
+                            <FiPlus size={22} />
+                        </button>
+                    )
+                }
+            />
 
             {/* Circular Stats & Calendar */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -111,7 +113,7 @@ export default function DSAHeader({
                     </div>
                 </div>
 
-                {/* Balanced Calendar Widget */}
+                {/* Calendar Widget */}
                 <div className="lg:col-span-4 bg-black/40 backdrop-blur-xl border border-white/10 p-4 rounded-lg shadow-xl max-w-[320px] mx-auto w-full">
                     <div className="flex justify-between items-center mb-3 border-b border-white/10 pb-2">
                         <h3 className="text-[10px] font-bold text-white font-mono uppercase tracking-wider">{monthName} {year}</h3>

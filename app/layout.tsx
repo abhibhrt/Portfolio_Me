@@ -4,8 +4,6 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/navbar'
 import Footer from './components/footer'
-import { AlertProvider } from './hooks/useAlert'
-import Alert from './components/alert'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} relative min-h-screen w-full overflow-x-hidden bg-[#09090b] text-white`}>
-        <div 
+        <div
           className="pointer-events-none fixed inset-0 z-0 opacity-30"
           style={{
             backgroundImage: `radial-gradient(#a1a1aa 1px, transparent 1px)`,
@@ -36,16 +34,11 @@ export default function RootLayout({
             WebkitMaskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)'
           }}
         />
-        
-        {/* --- Main App Layout --- */}
-        <AlertProvider>
-          <Alert />
-          <Navbar />
-          <main className="relative z-10 flex flex-col min-h-screen">
-            {children}
-          </main>
-          <Footer />
-        </AlertProvider>
+        <Navbar />
+        <main className="relative z-10 flex flex-col min-h-screen">
+          {children}
+        </main>
+        <Footer />
 
       </body>
     </html>

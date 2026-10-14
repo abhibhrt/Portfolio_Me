@@ -1,6 +1,9 @@
-import HomePage from './home/main.home';
-// import YouTubeShortsSection from './home/embed.home';
-import AboutSection from './home/about.home';
+// src/app/page.tsx
+'use client'
+
+import HomePage from './home/main.home'
+import AboutSection from './home/about.home'
+import { useAuthCheck } from '@/app/hooks/useAuthCheck'
 
 const SHORT_IDS = [
   'RP-dHcdcJh4',
@@ -17,15 +20,16 @@ const SHORT_IDS = [
   'kYlTMH2DWRY',
   'XA-gFL97q1g',
   'XvywuglUZ1k',
-  'YrbWKil2gxw'
-];
+  'YrbWKil2gxw',
+]
 
 export default function Home() {
+  useAuthCheck()
   return (
     <div className="flex flex-col gap-12 pb-16">
       <HomePage />
       {/* <YouTubeShortsSection shortIds={SHORT_IDS} /> */}
       <AboutSection />
     </div>
-  );
+  )
 }

@@ -1,25 +1,19 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import {
-    FaGithub, FaLinkedin, FaTwitter, FaEnvelope,
-    FaMapMarkerAlt, FaArrowUp, FaYoutube, FaTerminal
-} from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaMapMarkerAlt, FaArrowUp, FaYoutube } from 'react-icons/fa'
 import { SiLeetcode } from 'react-icons/si'
 import Link from 'next/link'
-import { useState } from 'react'
-import PublicStories from './PublicStories'
+import PublicStories from './public-stories'
 
 const socialLinks = [
     { icon: <FaGithub />, href: 'https://github.com/abhibhrt', label: 'GH' },
     { icon: <FaLinkedin />, href: 'https://linkedin.com/in/abhibhrt', label: 'LI' },
     { icon: <FaTwitter />, href: 'https://twitter.com/abhibhrt', label: 'TW' },
     { icon: <SiLeetcode />, href: 'https://leetcode.com/abhibhrt', label: 'LC' },
-    // { icon: <FaYoutube />, href: 'https://youtube.com/@loopsafar', label: 'YT' },
+    { icon: <FaYoutube />, href: 'https://youtube.com/@loopsafar', label: 'YT' },
 ]
 
 export default function Footer() {
-    const [email, setEmail] = useState('')
     const currentYear = new Date().getFullYear()
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -64,7 +58,7 @@ export default function Footer() {
                         <div>
                             <h4 className="text-xs font-mono text-white mb-6 uppercase tracking-widest border-l-2 border-blue-600 pl-3">Index</h4>
                             <ul className="space-y-3 text-sm text-slate-400">
-                                {['Projects', 'Contacts', 'Progress', 'Admin'].map((item) => (
+                                {['Projects', 'Contacts', 'Problems', 'SignIn'].map((item) => (
                                     <li key={item}>
                                         <Link href={`/${item.toLowerCase()}`} className="hover:text-blue-400 transition-colors flex items-center gap-2 group">
                                             <span className="h-[1px] w-0 bg-blue-500 group-hover:w-3 transition-all" />
@@ -77,16 +71,15 @@ export default function Footer() {
                         <div>
                             <h4 className="text-xs font-mono text-white mb-6 uppercase tracking-widest border-l-2 border-blue-600 pl-3">Stack</h4>
                             <ul className="space-y-2 text-[11px] font-mono text-slate-500 uppercase">
-                                <li>Next.js 14</li>
-                                <li>TypeScript</li>
+                                <li>Next.js</li>
+                                <li>Azure</li>
                                 <li>Node.js</li>
-                                <li>MongoDB</li>
+                                <li>SQL/NoSQL</li>
                             </ul>
                         </div>
                     </div>
 
                     <div className="lg:col-span-4">
-                        {/* <LoadingAnimation/> */}
                         <PublicStories/>
                     </div>
                 </div>
