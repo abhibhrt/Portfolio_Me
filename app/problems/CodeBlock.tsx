@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiX, FiCopy, FiCheck, FiFileText, FiCode } from 'react-icons/fi';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import cpp from 'react-syntax-highlighter/dist/esm/languages/hljs/cpp';
@@ -52,54 +54,54 @@ export const CodeModal = ({ problem, onClose, initialTab = 'code' }: CodeModalPr
   if (!problem) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-10 z-[100]">
-      {/* Overlay Backdrop Click */}
-      <div className="absolute inset-0" onClick={onClose}></div>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-8 z-[100]">
+      {/* Backdrop */}
+      <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Main Glass Modal Container */}
-      <div className="relative bg-black/60 backdrop-blur-2xl border border-white/10 w-full max-w-5xl max-h-[85vh] flex flex-col shadow-2xl rounded-xl overflow-hidden z-10">
-
-        {/* Tab Switcher & Right-aligned Close Button */}
-        <div className="flex justify-between items-center border-b border-white/10 bg-black/40 px-4">
-          <div className="flex">
+      {/* Main Container */}
+      <div className="relative bg-slate-950/80 backdrop-blur-2xl border border-white/10 w-full max-w-5xl max-h-[85vh] flex flex-col shadow-2xl rounded-2xl overflow-hidden z-10">
+        
+        {/* Header Tabs */}
+        <div className="flex justify-between items-center border-b border-white/10 bg-black/40 px-6 py-2.5">
+          <div className="flex gap-2">
             <button 
               onClick={() => setActiveTab('code')}
-              className={`flex items-center gap-2 px-8 py-3 text-[10px] font-mono font-bold uppercase tracking-[0.2em] transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-mono font-medium tracking-wider transition-all cursor-pointer ${
                 activeTab === 'code' 
-                  ? 'text-blue-400 border-b-2 border-blue-500 bg-blue-500/10' 
-                  : 'text-slate-400 hover:text-white'
+                  ? 'text-blue-400 bg-blue-500/15 border border-blue-500/30 shadow-sm shadow-blue-500/10' 
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <FiCode /> Source Code
+              <FiCode className="text-sm" /> Source Code
             </button>
             <button 
               onClick={() => setActiveTab('notes')}
-              className={`flex items-center gap-2 px-8 py-3 text-[10px] font-mono font-bold uppercase tracking-[0.2em] transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-mono font-medium tracking-wider transition-all cursor-pointer ${
                 activeTab === 'notes' 
-                  ? 'text-emerald-400 border-b-2 border-emerald-500 bg-emerald-500/10' 
-                  : 'text-slate-400 hover:text-white'
+                  ? 'text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 shadow-sm shadow-emerald-500/10' 
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <FiFileText /> Logical Notes
+              <FiFileText className="text-sm" /> Revision Notes
             </button>
           </div>
 
           <button 
             onClick={onClose} 
-            className="text-slate-400 hover:text-white transition-colors cursor-pointer p-2 bg-white/5 border border-white/10 rounded-md"
+            className="text-slate-400 hover:text-white transition-colors cursor-pointer p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg"
             title="Close"
           >
             <FiX size={18} />
           </button>
         </div>
 
-        {/* Dynamic Content */}
+        {/* Tab Body */}
         <div className="flex-1 overflow-y-auto custom-scrollbar bg-black/30">
           {activeTab === 'code' ? (
             <div className="relative">
               <button 
                 onClick={handleCopy} 
-                className="absolute top-4 right-6 z-20 bg-white/10 hover:bg-blue-600 text-white p-2 rounded-md transition-all backdrop-blur-md border border-white/10 cursor-pointer shadow-lg"
+                className="absolute top-4 right-6 z-20 bg-white/10 hover:bg-blue-600 text-white p-2.5 rounded-lg transition-all backdrop-blur-md border border-white/10 cursor-pointer shadow-lg"
                 title="Copy Code"
               >
                 {copied ? <FiCheck className="text-emerald-400" /> : <FiCopy size={16} />}
@@ -123,13 +125,94 @@ export const CodeModal = ({ problem, onClose, initialTab = 'code' }: CodeModalPr
               </SyntaxHighlighter>
             </div>
           ) : (
-            <div className="relative p-8 md:p-12 min-h-[300px]" style={{
-              backgroundImage: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px)',
-              backgroundSize: '100% 2.5rem'
-            }}>
-              <p className="text-slate-300 text-sm leading-[2.5rem] font-mono whitespace-pre-wrap">
-                {problem.note || "No notes available for this problem yet."}
-              </p>
+            <div className="p-6 md:p-10 max-w-4xl mx-auto">
+              {problem.note ? (
+                <div className="space-y-4">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      h1: ({ children }) => (
+                        <h1 className="text-xl font-bold text-white border-b border-white/10 pb-3 mb-4 tracking-tight">
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children }) => (
+                        <h2 className="text-lg font-bold text-slate-100 border-b border-white/10 pb-2 mt-6 mb-3">
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children }) => (
+                        <h3 className="text-sm font-semibold tracking-wide uppercase text-emerald-400 mt-6 mb-2 flex items-center gap-2">
+                          <span className="w-1.5 h-3.5 bg-emerald-500 rounded-sm inline-block"></span>
+                          {children}
+                        </h3>
+                      ),
+                      h4: ({ children }) => (
+                        <h4 className="text-xs font-semibold text-slate-200 mt-3 mb-1 uppercase tracking-wider">
+                          {children}
+                        </h4>
+                      ),
+                      p: ({ children }) => (
+                        <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                          {children}
+                        </p>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold text-white">
+                          {children}
+                        </strong>
+                      ),
+                      em: ({ children }) => (
+                        <em className="text-amber-300/90 not-italic font-mono text-xs px-1 py-0.5 bg-amber-500/10 rounded border border-amber-500/20">
+                          {children}
+                        </em>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="list-disc list-outside ml-5 space-y-1.5 mb-4 text-sm text-slate-300">
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="list-decimal list-outside ml-5 space-y-1.5 mb-4 text-sm text-slate-300">
+                          {children}
+                        </ol>
+                      ),
+                      li: ({ children }) => (
+                        <li className="leading-relaxed pl-1 marker:text-emerald-500">
+                          {children}
+                        </li>
+                      ),
+                      code: ({ children, ...props }: any) => {
+                        return (
+                          <code
+                            className="bg-white/10 text-pink-400 font-mono text-[12px] px-1.5 py-0.5 rounded border border-white/10"
+                            {...props}
+                          >
+                            {children}
+                          </code>
+                        );
+                      },
+                      blockquote: ({ children }) => (
+                        <blockquote className="border-l-2 border-emerald-500/70 bg-emerald-500/5 px-4 py-2 rounded-r-md my-3 italic text-slate-300 text-sm">
+                          {children}
+                        </blockquote>
+                      ),
+                    }}
+                  >
+                    {problem.note}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <FiFileText className="text-slate-600 text-4xl mb-3" />
+                  <p className="text-slate-400 font-mono text-sm">
+                    No revision notes generated yet.
+                  </p>
+                  <p className="text-slate-600 text-xs mt-1">
+                    Mark problem as solved with code to auto-generate notes.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
