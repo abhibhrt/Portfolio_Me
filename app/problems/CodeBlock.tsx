@@ -4,6 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { FiX, FiCopy, FiCheck, FiFileText, FiCode } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
+// Import KaTeX styles for math formulas ($and$$)
+import 'katex/dist/katex.min.css';
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import cpp from 'react-syntax-highlighter/dist/esm/languages/hljs/cpp';
@@ -129,7 +134,8 @@ export const CodeModal = ({ problem, onClose, initialTab = 'code' }: CodeModalPr
               {problem.note ? (
                 <div className="space-y-4">
                   <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
                     components={{
                       h1: ({ children }) => (
                         <h1 className="text-xl font-bold text-white border-b border-white/10 pb-3 mb-4 tracking-tight">
@@ -182,7 +188,11 @@ export const CodeModal = ({ problem, onClose, initialTab = 'code' }: CodeModalPr
                           {children}
                         </li>
                       ),
-                      code: ({ children, ...props }: any) => {
+                      code: ({ className, children, ...props }: any) => {
+                        // Avoid styling KaTeX math elements with the pink code badge
+                        if (className?.includes('math')) {
+                          return <code className={className} {...props}>{children}</code>;
+                        }
                         return (
                           <code
                             className="bg-white/10 text-pink-400 font-mono text-[12px] px-1.5 py-0.5 rounded border border-white/10"
