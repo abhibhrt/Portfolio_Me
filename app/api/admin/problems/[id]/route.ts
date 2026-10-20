@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/app/api/lib/db';
 import Problem from '@/app/api/models/problem.model';
+import { generateRevisionNote } from '@/app/api/lib/gemini';
 
 export async function PUT(
   req: NextRequest,
@@ -15,9 +16,41 @@ export async function PUT(
       return NextResponse.json({ message: "ID parameter required" }, { status: 400 });
     }
 
+    const updateData: Record<string, any> = { ...body };
+
+    // Set completion date when status is changed to Solved
+    if (body.status === 'Solved') {
+      updateData.date = new Date();
+    }
+
+    const hasIncomingCode = body.code?.sourceCode && body.code.sourceCode.trim().length > 0;
+
+    // Generate revision note using Gemini if new code is provided and note is empty
+    if (hasIncomingCode && !body.note) {
+      const existingProblem = await Problem.findById(id).select('problemName code');
+
+      if (!existingProblem) {
+        return NextResponse.json({ message: "Problem not found" }, { status: 404 });
+      }
+
+      const problemName = body.problemName || existingProblem.problemName;
+      const language = body.code?.language || existingProblem.code?.language || '';
+      const sourceCode = body.code.sourceCode;
+
+      try {
+        updateData.note = await generateRevisionNote({
+          problemName,
+          language,
+          sourceCode,
+        });
+      } catch (aiError) {
+        console.error("Gemini revision note generation failed:", aiError);
+      }
+    }
+
     const updatedProblem = await Problem.findByIdAndUpdate(
       id,
-      { $set: body },
+      { $set: updateData },
       { new: true, runValidators: true }
     );
 
