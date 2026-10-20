@@ -18,14 +18,12 @@ export async function PUT(
 
     const updateData: Record<string, any> = { ...body };
 
-    // Set completion date when status is changed to Solved
     if (body.status === 'Solved') {
       updateData.date = new Date();
     }
 
     const hasIncomingCode = body.code?.sourceCode && body.code.sourceCode.trim().length > 0;
 
-    // Generate revision note using Gemini if new code is provided and note is empty
     if (hasIncomingCode && !body.note) {
       const existingProblem = await Problem.findById(id).select('problemName code');
 
