@@ -151,8 +151,8 @@ export default function DSAProblems({
 
                                         <div className="flex items-center gap-4 w-full sm:w-64">
                                             <div className="flex-1 bg-white/10 h-2 rounded-full overflow-hidden">
-                                                <div 
-                                                    className="bg-blue-500 h-full transition-all duration-500" 
+                                                <div
+                                                    className="bg-blue-500 h-full transition-all duration-500"
                                                     style={{ width: `${progressPercent}%` }}
                                                 />
                                             </div>
@@ -194,10 +194,10 @@ export default function DSAProblems({
                                                                     </div>
                                                                 </td>
                                                                 <td className="px-4 py-4 text-center">
-                                                                    <span className={classNames('text-[9px] font-bold px-2 py-0.5 rounded-sm border uppercase font-mono', 
-                                                                        item.difficulty === 'Easy' ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : 
-                                                                        item.difficulty === 'Medium' ? 'text-orange-400 border-orange-500/20 bg-orange-500/5' : 
-                                                                        'text-red-400 border-red-500/20 bg-red-500/5'
+                                                                    <span className={classNames('text-[9px] font-bold px-2 py-0.5 rounded-sm border uppercase font-mono',
+                                                                        item.difficulty === 'Easy' ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' :
+                                                                            item.difficulty === 'Medium' ? 'text-orange-400 border-orange-500/20 bg-orange-500/5' :
+                                                                                'text-red-400 border-red-500/20 bg-red-500/5'
                                                                     )}>
                                                                         {item.difficulty}
                                                                     </span>
@@ -232,9 +232,9 @@ export default function DSAProblems({
                                                                 </td>
                                                                 <td className="px-4 py-4 text-center">
                                                                     {item.note ? (
-                                                                        <button 
-                                                                            onClick={() => handleOpenModal(item, 'notes')} 
-                                                                            className="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs" 
+                                                                        <button
+                                                                            onClick={() => handleOpenModal(item, 'notes')}
+                                                                            className="text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs"
                                                                             title="View Notes"
                                                                         >
                                                                             <FiFileText size={15} />
@@ -245,9 +245,9 @@ export default function DSAProblems({
                                                                 </td>
                                                                 <td className="px-4 py-4 text-center">
                                                                     {item.code?.sourceCode ? (
-                                                                        <button 
-                                                                            onClick={() => handleOpenModal(item, 'code')} 
-                                                                            className="text-slate-400 hover:text-blue-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs" 
+                                                                        <button
+                                                                            onClick={() => handleOpenModal(item, 'code')}
+                                                                            className="text-slate-400 hover:text-blue-400 transition-colors cursor-pointer inline-flex items-center gap-1 font-mono text-xs"
                                                                             title="View Code"
                                                                         >
                                                                             <FiCode size={15} />
@@ -259,16 +259,16 @@ export default function DSAProblems({
                                                                 {isAuthenticated && (
                                                                     <td className="px-4 py-4 text-center">
                                                                         <div className="flex items-center justify-center gap-3">
-                                                                            <button 
-                                                                                onClick={() => setEditModalProblem(item)} 
-                                                                                className="text-blue-400 hover:text-white transition-colors cursor-pointer" 
+                                                                            <button
+                                                                                onClick={() => setEditModalProblem(item)}
+                                                                                className="text-blue-400 hover:text-white transition-colors cursor-pointer"
                                                                                 title="Edit Problem"
                                                                             >
                                                                                 <FiEdit3 size={15} />
                                                                             </button>
-                                                                            <button 
-                                                                                onClick={() => setDeleteId(item._id)} 
-                                                                                className="text-red-400 hover:text-white transition-colors cursor-pointer" 
+                                                                            <button
+                                                                                onClick={() => setDeleteId(item._id)}
+                                                                                className="text-red-400 hover:text-white transition-colors cursor-pointer"
                                                                                 title="Delete Problem"
                                                                             >
                                                                                 <FiTrash2 size={15} />
@@ -297,10 +297,10 @@ export default function DSAProblems({
             {/* Admin Edit Modal */}
             <AnimatePresence>
                 {editModalProblem && (
-                    <EditProblemModal 
-                        problem={editModalProblem} 
-                        onClose={() => setEditModalProblem(null)} 
-                        onSuccess={onProblemUpdate} 
+                    <EditProblemModal
+                        problem={editModalProblem}
+                        onClose={() => setEditModalProblem(null)}
+                        onSuccess={onProblemUpdate}
                     />
                 )}
             </AnimatePresence>
@@ -317,14 +317,14 @@ export default function DSAProblems({
     );
 }
 
-function EditProblemModal({ 
-    problem, 
-    onClose, 
-    onSuccess 
-}: { 
-    problem: ProblemItem; 
-    onClose: () => void; 
-    onSuccess: (p: ProblemItem) => void 
+function EditProblemModal({
+    problem,
+    onClose,
+    onSuccess
+}: {
+    problem: ProblemItem;
+    onClose: () => void;
+    onSuccess: (p: ProblemItem) => void
 }) {
     const [formData, setFormData] = useState<ProblemItem>({ ...problem });
     const [loading, setLoading] = useState(false);
@@ -350,7 +350,7 @@ function EditProblemModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -366,7 +366,7 @@ function EditProblemModal({
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Notes</label>
-                        <textarea 
+                        <textarea
                             rows={3}
                             value={formData.note || ''}
                             onChange={(e) => setFormData({ ...formData, note: e.target.value })}
@@ -378,7 +378,7 @@ function EditProblemModal({
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Language</label>
-                            <input 
+                            <input
                                 type="text"
                                 value={formData.code?.language || ''}
                                 onChange={(e) => setFormData({ ...formData, code: { ...formData.code, language: e.target.value } })}
@@ -387,7 +387,7 @@ function EditProblemModal({
                             />
                         </div>
                         <div className="flex items-center gap-3 pt-6">
-                            <input 
+                            <input
                                 type="checkbox"
                                 id="revision"
                                 checked={formData.isRevisionRequired}
@@ -400,7 +400,7 @@ function EditProblemModal({
 
                     <div>
                         <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Source Code</label>
-                        <textarea 
+                        <textarea
                             rows={6}
                             value={formData.code?.sourceCode || ''}
                             onChange={(e) => setFormData({ ...formData, code: { ...formData.code, sourceCode: e.target.value } })}

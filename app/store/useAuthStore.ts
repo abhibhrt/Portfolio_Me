@@ -14,6 +14,7 @@ interface UserProfile {
     pincode?: string
     country?: string
   }
+  mapUrl?: string
 }
 
 interface AuthState {

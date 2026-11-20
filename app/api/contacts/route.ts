@@ -3,6 +3,9 @@ import { connectDB } from '../lib/db'
 import { User } from '../models/user.model'
 import { ContactMessage } from '../models/contacts.model'
 
+const DEFAULT_MAP_URL =
+  'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d40192.30845307541!2d77.41823089476793!3d23.23106021217998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1780330535483!5m2!1sen!2sin'
+
 export async function GET() {
   try {
     await connectDB()
@@ -15,14 +18,12 @@ export async function GET() {
         { status: 404 }
       )
     }
- 
-    const mapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d40192.30845307541!2d77.41823089476793!3d23.23106021217998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1780330535483!5m2!1sen!2sin`
 
     const contactData = {
       email: adminUser.email,
       phone: adminUser.phone,
       whatsapp: adminUser.phone,
-      mapUrl: mapUrl,
+      mapUrl: adminUser.mapUrl?.trim() || DEFAULT_MAP_URL,
     }
 
     return NextResponse.json(contactData, { status: 200 })

@@ -8,11 +8,17 @@ import { useAuthStore } from '@/app/store/useAuthStore'
 
 interface UpdateProfileModalProps {
   isOpen: boolean
+  currentMapUrl?: string
   onClose: () => void
   onSuccess: () => void
 }
 
-export default function UpdateProfileModal({ isOpen, onClose, onSuccess }: UpdateProfileModalProps) {
+export default function UpdateProfileModal({
+  isOpen,
+  currentMapUrl = '',
+  onClose,
+  onSuccess,
+}: UpdateProfileModalProps) {
   const { user, setAuth } = useAuthStore()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -20,6 +26,7 @@ export default function UpdateProfileModal({ isOpen, onClose, onSuccess }: Updat
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [mapUrl, setMapUrl] = useState('')
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
@@ -31,13 +38,14 @@ export default function UpdateProfileModal({ isOpen, onClose, onSuccess }: Updat
       setName(user.name || '')
       setEmail(user.email || '')
       setPhone(user.phone || '')
+      setMapUrl(user.mapUrl || currentMapUrl || '')
       setStreet(user.address?.street || '')
       setCity(user.address?.city || '')
       setState(user.address?.state || '')
       setPincode(user.address?.pincode || '')
       setCountry(user.address?.country || 'India')
     }
-  }, [user])
+  }, [user, currentMapUrl, isOpen])
 
   if (!isOpen) return null
 
@@ -51,6 +59,7 @@ export default function UpdateProfileModal({ isOpen, onClose, onSuccess }: Updat
         name,
         email,
         phone,
+        mapUrl,
         address: { street, city, state, pincode, country },
       }
 
@@ -119,6 +128,19 @@ export default function UpdateProfileModal({ isOpen, onClose, onSuccess }: Updat
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                className="w-full bg-transparent border-b border-white/10 py-2 text-white text-sm focus:outline-none focus:border-blue-400"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">
+                Google Map Embed URL
+              </label>
+              <input
+                type="text"
+                placeholder="Paste Google Maps embed URL or <iframe> code"
+                value={mapUrl}
+                onChange={(e) => setMapUrl(e.target.value)}
                 className="w-full bg-transparent border-b border-white/10 py-2 text-white text-sm focus:outline-none focus:border-blue-400"
               />
             </div>

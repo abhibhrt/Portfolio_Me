@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
+import { motion } from 'framer-motion';
 import { FiChevronDown, FiPlus } from 'react-icons/fi';
 import PageHeader from '@/app/components/page-header';
 
@@ -22,6 +23,88 @@ interface ProgressProps {
     onOpenAddModal: () => void;
 }
 
+interface CircularProgressRingProps {
+    solved: number;
+    total: number;
+    label: string;
+    strokeColor: string;
+    trackColor: string;
+    textColor: string;
+    glowClass: string;
+}
+
+function CircularProgressRing({
+    solved,
+    total,
+    label,
+    strokeColor,
+    trackColor,
+    textColor,
+    glowClass,
+}: CircularProgressRingProps) {
+    const size = 160;
+    const strokeWidth = 9;
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const percentage = total > 0 ? Math.min(100, Math.round((solved / total) * 100)) : 0;
+    const targetOffset = circumference - (percentage / 100) * circumference;
+
+    return (
+        <div className="relative w-24 h-24 sm:w-36 sm:h-36 lg:w-40 lg:h-40 mx-auto flex items-center justify-center rounded-full bg-black/50 backdrop-blur-xl border border-white/10 shadow-2xl group">
+            {/* Subtle Ambient Glow */}
+            <div
+                className={classNames(
+                    'absolute inset-2 sm:inset-3 rounded-full blur-xl opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none',
+                    glowClass
+                )}
+            />
+
+            <svg
+                viewBox={`0 0 ${size} ${size}`}
+                className="w-full h-full -rotate-90 drop-shadow-[0_0_8px_rgba(0,0,0,0.6)]"
+            >
+                {/* Background Track */}
+                <circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    fill="transparent"
+                    stroke={trackColor}
+                    strokeWidth={strokeWidth}
+                />
+
+                {/* Active Progress Arc */}
+                <motion.circle
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    fill="transparent"
+                    stroke={strokeColor}
+                    strokeWidth={strokeWidth}
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    initial={{ strokeDashoffset: circumference }}
+                    animate={{ strokeDashoffset: targetOffset }}
+                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                />
+            </svg>
+
+            {/* Center Stats */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-1 sm:px-2">
+                <span className={classNames('font-mono text-sm sm:text-xl font-bold tracking-tight leading-none', textColor)}>
+                    {solved}/{total}
+                </span>
+                <span className="text-[8px] sm:text-[10px] font-mono text-slate-300 uppercase tracking-wider sm:tracking-widest mt-1">
+                    {label}
+                </span>
+                <span className="text-[8px] sm:text-[9px] font-mono text-slate-500 mt-0.5">
+                    {percentage}%
+                </span>
+            </div>
+        </div>
+    );
+}
+
 export default function Progress({
     problems,
     selectedDate,
@@ -31,6 +114,14 @@ export default function Progress({
     isAdmin,
     onOpenAddModal
 }: ProgressProps) {
+
+    const todayStr = useMemo(() => {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }, []);
 
     // Activity Data for Calendar
     const activityData = useMemo(() => {
@@ -92,25 +183,37 @@ export default function Progress({
             {/* Circular Stats & Calendar */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 
-                {/* Circular Cards */}
-                <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div className="relative w-36 h-36 mx-auto rounded-full border-4 border-emerald-500/30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-xl shadow-xl">
-                        <div className="absolute inset-0 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin-slow pointer-events-none" style={{ animationDuration: '8s' }} />
-                        <span className="text-emerald-400 font-mono text-xl font-bold">{stats.Easy.solved}/{stats.Easy.total}</span>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">Easy</span>
-                    </div>
+                {/* Circular Progress Rings */}
+                <div className="lg:col-span-8 grid grid-cols-3 gap-2.5 sm:gap-6">
+                    <CircularProgressRing
+                        solved={stats.Easy.solved}
+                        total={stats.Easy.total}
+                        label="Easy"
+                        strokeColor="#34d399"
+                        trackColor="rgba(16, 185, 129, 0.14)"
+                        textColor="text-emerald-400"
+                        glowClass="bg-emerald-500"
+                    />
 
-                    <div className="relative w-36 h-36 mx-auto rounded-full border-4 border-amber-500/30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-xl shadow-xl">
-                        <div className="absolute inset-0 rounded-full border-4 border-amber-400 border-t-transparent animate-spin-slow pointer-events-none" style={{ animationDuration: '8s' }} />
-                        <span className="text-amber-400 font-mono text-xl font-bold">{stats.Medium.solved}/{stats.Medium.total}</span>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">Medium</span>
-                    </div>
+                    <CircularProgressRing
+                        solved={stats.Medium.solved}
+                        total={stats.Medium.total}
+                        label="Medium"
+                        strokeColor="#fbbf24"
+                        trackColor="rgba(245, 158, 11, 0.14)"
+                        textColor="text-amber-400"
+                        glowClass="bg-amber-500"
+                    />
 
-                    <div className="relative w-36 h-36 mx-auto rounded-full border-4 border-rose-500/30 flex flex-col items-center justify-center bg-black/40 backdrop-blur-xl shadow-xl">
-                        <div className="absolute inset-0 rounded-full border-4 border-rose-400 border-t-transparent animate-spin-slow pointer-events-none" style={{ animationDuration: '8s' }} />
-                        <span className="text-rose-400 font-mono text-xl font-bold">{stats.Hard.solved}/{stats.Hard.total}</span>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">Hard</span>
-                    </div>
+                    <CircularProgressRing
+                        solved={stats.Hard.solved}
+                        total={stats.Hard.total}
+                        label="Hard"
+                        strokeColor="#fb7185"
+                        trackColor="rgba(244, 63, 94, 0.14)"
+                        textColor="text-rose-400"
+                        glowClass="bg-rose-500"
+                    />
                 </div>
 
                 {/* Calendar Widget */}
@@ -130,7 +233,7 @@ export default function Progress({
                         </div>
                     </div>
                     <div className="grid grid-cols-7 gap-1.5">
-                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => <div key={d} className="text-[8px] font-bold text-slate-500 text-center font-mono">{d}</div>)}
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, idx) => <div key={idx} className="text-[8px] font-bold text-slate-500 text-center font-mono">{d}</div>)}
                         {dates.map((date, i) => {
                             if (!date) return <div key={i} />;
                             const y = date.getFullYear();
@@ -138,15 +241,21 @@ export default function Progress({
                             const d = String(date.getDate()).padStart(2, '0');
                             const dStr = `${y}-${m}-${d}`;
                             const count = activityData[dStr] || 0;
+                            const isToday = dStr === todayStr;
                             const isSelected = selectedDate === dStr;
 
                             return (
                                 <div key={i}
                                     onClick={() => setSelectedDate(isSelected ? null : dStr)}
-                                    title={count > 0 ? `${count} Problems Solved` : ''}
+                                    title={count > 0 ? `${count} Problems Solved` : isToday ? 'Today' : ''}
                                     className={classNames(
                                         'aspect-square flex items-center justify-center text-[9px] font-mono rounded-full border transition-all cursor-pointer h-7 w-7 mx-auto',
-                                        count > 0 ? 'bg-emerald-600/30 border-emerald-500/50 text-emerald-300 font-bold' : 'border-white/5 text-slate-500 hover:border-white/20',
+                                        count > 0
+                                            ? 'bg-emerald-600/30 border-emerald-500/50 text-emerald-300 font-bold'
+                                            : isToday
+                                                ? 'border-red-500 text-red-300 font-bold'
+                                                : 'border-white/5 text-slate-500 hover:border-white/20',
+                                        isToday && 'ring-1 ring-red-500',
                                         isSelected && 'ring-1 ring-blue-400 ring-offset-1 ring-offset-black'
                                     )}
                                 >

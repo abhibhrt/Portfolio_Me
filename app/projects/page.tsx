@@ -60,7 +60,7 @@ export default function ProjectsPage() {
             isAdmin && (
               <button
                 onClick={() => setIsAddModalOpen(true)}
-                className="cursor-pointer w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+                className="cursor-pointer w-12 h-12 rounded-full bg-blue-600/30 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105"
                 title="Add New Project"
               >
                 <FiPlus size={22} />

@@ -3,17 +3,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import CommonLoading from '@/app/components/loading'
-import ViewStory from './view-story'
+import ViewStory, { StoryItem } from './view-story'
 import AddStoryModal from './add-story-modal'
 import { useAuthStore } from '@/app/store/useAuthStore'
 import { FiPlus } from 'react-icons/fi'
-
-interface StoryItem {
-  _id: string
-  url: string
-  caption?: string
-  createdAt: string
-}
 
 export default function PublicStories() {
   const [stories, setStories] = useState<StoryItem[]>([])
@@ -41,14 +34,14 @@ export default function PublicStories() {
     return url.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null
   }
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex === null) return
     if (currentIndex < stories.length - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      closeStory()
+      setCurrentIndex(null)
     }
-  }
+  }, [currentIndex, stories.length])
 
   const handlePrev = () => {
     if (currentIndex === null) return
@@ -59,6 +52,26 @@ export default function PublicStories() {
 
   const closeStory = () => {
     setCurrentIndex(null)
+  }
+
+  const handleDeleteStory = async (story: StoryItem) => {
+    try {
+      await axios.delete(`/api/admin/story/${story._id}`)
+
+      setStories((prev) => {
+        const remaining = prev.filter((item) => item._id !== story._id)
+
+        setCurrentIndex((prevIdx) => {
+          if (prevIdx === null) return null
+          if (remaining.length === 0) return null
+          return Math.min(prevIdx, remaining.length - 1)
+        })
+
+        return remaining
+      })
+    } catch (err) {
+      console.error('Failed to delete story:', err)
+    }
   }
 
   if (loading) {
@@ -127,9 +140,11 @@ export default function PublicStories() {
       <ViewStory
         stories={stories}
         currentIndex={currentIndex}
+        isAdmin={isAdmin}
         onClose={closeStory}
         onNext={handleNext}
         onPrev={handlePrev}
+        onDelete={handleDeleteStory}
       />
 
       {/* ADD STORY MODAL */}

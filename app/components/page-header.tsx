@@ -10,6 +10,11 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ name, path, action }: PageHeaderProps) {
+  const words = name.trim().split(/\s+/)
+  const hasMultipleWords = words.length > 1
+  const primaryText = hasMultipleWords ? words.slice(0, -1).join(' ') : ''
+  const accentText = hasMultipleWords ? words[words.length - 1] : name
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -22,8 +27,11 @@ export default function PageHeader({ name, path, action }: PageHeaderProps) {
           <span className="h-[1px] w-8 bg-blue-400" />
           {path}
         </div>
-        <h2 className="text-4xl font-bold text-white tracking-tighter uppercase">
-          {name}
+        <h2 className="text-4xl font-bold tracking-tighter uppercase">
+          {hasMultipleWords && (
+            <span className="text-white">{primaryText} </span>
+          )}
+          <span className="text-slate-400">{accentText}</span>
         </h2>
       </div>
 

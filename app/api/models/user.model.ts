@@ -14,37 +14,37 @@ export interface IUser extends Document {
     pincode?: string;
     country?: string;
   };
+  mapUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// 2. Updated Mongoose Schema
 const UserSchema = new Schema<IUser>(
   {
-    username: { 
-      type: String, 
-      required: [true, 'Username is required'], 
-      unique: true, 
-      trim: true 
+    username: {
+      type: String,
+      required: [true, 'Username is required'],
+      unique: true,
+      trim: true
     },
-    password: { 
-      type: String, 
-      required: [true, 'Password is required'] 
+    password: {
+      type: String,
+      required: [true, 'Password is required']
     },
-    name: { 
-      type: String, 
-      trim: true 
+    name: {
+      type: String,
+      trim: true
     },
-    email: { 
-      type: String, 
-      unique: true, 
-      lowercase: true, 
+    email: {
+      type: String,
+      unique: true,
+      lowercase: true,
       trim: true,
       sparse: true
     },
-    phone: { 
-      type: String, 
-      trim: true 
+    phone: {
+      type: String,
+      trim: true
     },
     address: {
       street: { type: String, trim: true },
@@ -52,6 +52,11 @@ const UserSchema = new Schema<IUser>(
       state: { type: String, trim: true },
       pincode: { type: String, trim: true },
       country: { type: String, trim: true, default: 'India' }
+    },
+    mapUrl: {
+      type: String,
+      trim: true,
+      default: ''
     }
   },
   { timestamps: true }
