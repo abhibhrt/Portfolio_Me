@@ -64,7 +64,7 @@ export default function AddProblemModal({
         date,
       }
 
-      await axios.post('/api/problem', payload)
+      await axios.post('/api/admin/problems', payload)
       onSuccess()
       onClose()
       setProblemName('')
