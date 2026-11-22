@@ -4,14 +4,16 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-import { FiLock, FiUser, FiArrowRight } from 'react-icons/fi'
-import PageHeader from '@/app/components/page-header'
-import CommonLoading from '@/app/components/loading'
+import { FiLock, FiUser, FiArrowRight, FiEye, FiEyeOff, FiShield } from 'react-icons/fi'
+import { useAuthStore } from '@/app/store/useAuthStore'
 
 export default function AdminSigninPage() {
   const router = useRouter()
+  const { setAuth } = useAuthStore()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -26,8 +28,12 @@ export default function AdminSigninPage() {
         password,
       })
 
-      if (response.data.success) {
+      if (response.data?.success) {
+        if (response.data.user) {
+          setAuth(response.data.user)
+        }
         router.push('/')
+        router.refresh()
       }
     } catch (error: any) {
       console.error('Signin failed:', error)
@@ -40,18 +46,29 @@ export default function AdminSigninPage() {
   }
 
   return (
-    <section className="relative min-h-screen py-24 pt-30 px-6 overflow-hidden flex items-center justify-center">
-      <div className="relative z-10 w-full max-w-md mx-auto">
+    <section className="relative min-h-screen py-24 pt-32 px-6 overflow-hidden flex items-center justify-center text-white">
+      <div className="relative z-10 w-full max-w-md mx-auto space-y-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 rounded-lg shadow-xl relative overflow-hidden"
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-black/50 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-4 font-mono text-[9px] text-slate-500 uppercase">
-            Secured Portal
+          {/* Top Accent Bar */}
+          <div className="h-[2px] w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-transparent" />
+
+          {/* Card Header Bar */}
+          <div className="flex items-center justify-between px-6 py-3.5 border-b border-white/10 bg-black/50">
+            <span className="inline-flex items-center gap-2 text-[10px] font-mono text-slate-300 uppercase tracking-widest">
+              <FiShield className="text-blue-400" size={13} />
+              Admin Access
+            </span>
+            <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">
+              Secured Portal
+            </span>
           </div>
 
-          <form onSubmit={handleSignin} className="space-y-6">
+          <form onSubmit={handleSignin} className="p-6 sm:p-8 space-y-6">
             {/* Username Field */}
             <div className="space-y-2">
               <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest flex items-center gap-2">
@@ -60,10 +77,11 @@ export default function AdminSigninPage() {
               <input
                 required
                 type="text"
+                autoComplete="username"
                 placeholder="Enter admin username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-transparent border-b border-white/10 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-400 transition-colors text-sm"
+                className="w-full bg-white/[0.02] focus:bg-white/[0.04] px-3 border-b border-white/15 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-400 transition-all text-sm rounded-t-sm"
               />
             </div>
 
@@ -72,34 +90,45 @@ export default function AdminSigninPage() {
               <label className="text-[10px] font-mono text-blue-400 uppercase tracking-widest flex items-center gap-2">
                 <FiLock size={12} /> Password
               </label>
-              <input
-                required
-                type="password"
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-transparent border-b border-white/10 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-400 transition-colors text-sm"
-              />
+              <div className="relative flex items-center">
+                <input
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  placeholder="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-white/[0.02] focus:bg-white/[0.04] pl-3 pr-10 border-b border-white/15 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-400 transition-all text-sm rounded-t-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-2.5 text-slate-400 hover:text-white transition-colors p-1 cursor-pointer"
+                >
+                  {showPassword ? <FiEyeOff size={15} /> : <FiEye size={15} />}
+                </button>
+              </div>
             </div>
 
             {/* Error Message */}
             {errorMessage && (
-              <p className="text-xs font-mono text-red-400 bg-red-950/20 border border-red-500/20 p-2 rounded">
+              <div className="text-xs font-mono text-red-400 bg-red-950/30 border border-red-500/25 px-3.5 py-2.5 rounded-sm">
                 {errorMessage}
-              </p>
+              </div>
             )}
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full group flex items-center justify-center gap-3 py-4 bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs tracking-[0.2em] uppercase transition-all disabled:opacity-50 rounded-sm shadow-lg cursor-pointer"
+              className="w-full group flex items-center justify-center gap-3 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs tracking-[0.2em] uppercase transition-all disabled:opacity-50 rounded-sm shadow-lg cursor-pointer"
             >
               {loading ? (
                 'Authenticating...'
               ) : (
                 <>
-                  Authorize Session
+                  SignIn
                   <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                 </>
               )}

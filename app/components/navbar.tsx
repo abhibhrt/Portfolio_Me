@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
@@ -10,7 +10,7 @@ import { useAuthStore } from '@/app/store/useAuthStore'
 import { useAuthCheck } from '@/app/hooks/useAuthCheck'
 import ConfirmModal from '@/app/components/confirm-modal'
 
-const navItems = [
+const baseNavItems = [
   { name: 'HOME', path: '/' },
   { name: 'PROJECTS', path: '/projects' },
   { name: 'CONTACT', path: '/contacts' },
@@ -28,6 +28,12 @@ export default function Navbar() {
   const router = useRouter()
 
   const { isAdmin, user, clearAuth } = useAuthStore()
+
+  const navItems = useMemo(() => {
+    return isAdmin
+      ? [...baseNavItems, { name: 'BUDGET', path: '/budget' }]
+      : baseNavItems
+  }, [isAdmin])
 
   const handleLogoutConfirm = async (choice: boolean) => {
     setIsLogoutModalOpen(false)

@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
   // Protect both admin pages and admin API routes if needed
   const isProtectedRoute = 
     path.startsWith('/admin') || 
+    path.startsWith('/budget') || 
     path.startsWith('/api/admin');
 
   if (isProtectedRoute) {
@@ -46,6 +47,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/api/admin/:path*'
+    '/api/admin/:path*',
+    '/budget'
   ],
 };
